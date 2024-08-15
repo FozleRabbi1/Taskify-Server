@@ -1,6 +1,11 @@
 import { IProduct } from './Products.interface';
 import { Product } from './Products.module';
 
+const createProductIntoDB = async (payload: IProduct) => {
+  const result = await Product.create(payload);
+  return result;
+};
+
 const getAllProducts = async () => {
   const result = await Product.find();
   return result.reverse();
@@ -21,6 +26,7 @@ const deleteProductfromDB = async (id: string) => {
 };
 
 export const ProductsServices = {
+  createProductIntoDB,
   getAllProducts,
   updateProductIntoDB,
   deleteProductfromDB,

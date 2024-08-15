@@ -5,6 +5,11 @@ import { validateRequest } from '../../middleware/validateRequest';
 
 const router = express.Router();
 
+router.post(
+  '/',
+  validateRequest(ProductValidationSchema.ProductSchema),
+  productsControllers.createProduct,
+);
 router.get('/', productsControllers.getAllProducts);
 router.patch(
   '/',
