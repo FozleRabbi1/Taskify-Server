@@ -3,7 +3,6 @@ import core from 'cors';
 import router from './app/routes';
 const app: Application = express();
 
-//parser
 app.use(express.json());
 app.use(core());
 
