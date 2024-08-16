@@ -8,7 +8,7 @@ app.use(core());
 
 app.use('/api/v1', router);
 app.get('/', (req: Request, res: Response) => {
-  const a = 'server is runnign successfully';
+  const a = 'Server Is Runnign Successfully';
   res.send(a);
 });
 
