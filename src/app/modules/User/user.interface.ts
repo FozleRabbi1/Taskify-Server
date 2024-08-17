@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Model } from 'mongoose';
-import { User_Role } from './user.constent';
 
+// ======================================>>>>>>>> Register Interface
 export type TUserName = {
   firstName: string;
   lastName: string;
@@ -14,6 +14,12 @@ export interface TUser {
   name: TUserName;
 }
 
+// ======================================>>>>>>>> Login Interface
+export type TLoginUser = {
+  email: string;
+  password: string;
+};
+
 export interface UserModel extends Model<TUser> {
   isUserExistsByCustomeId(id: string): Promise<TUser>;
   isPasswordMatched(
@@ -21,5 +27,3 @@ export interface UserModel extends Model<TUser> {
     hashPassword: string,
   ): Promise<boolean>;
 }
-
-export type TUserRole = keyof typeof User_Role;
