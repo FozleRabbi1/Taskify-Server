@@ -6,13 +6,35 @@ import config from '../../config';
 
 const createUser = catchAsync(async (req, res) => {
   const { user: userData } = req.body;
-  console.log(userData);
-
   const result = await UserServices.createUserIntoDB(userData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User Registered successFully',
+    data: result,
+  });
+});
+
+const gatAllUsers = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllUserFromDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Get All Users successFully',
+    data: result,
+  });
+});
+
+const updateUserRole = catchAsync(async (req, res) => {
+  const { role, id } = req.body;
+  const result = await UserServices.updateUserRoleIntoDB(
+    id as string,
+    role as string,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User Role Update successFully',
     data: result,
   });
 });
@@ -45,8 +67,21 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
+const deleteUser = catchAsync(async (req, res) => {
+  const result = await UserServices.deleteUserFromDB(req?.params?.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User Delete Successfully',
+    data: result,
+  });
+});
+
 export const userController = {
   createUser,
+  gatAllUsers,
+  updateUserRole,
   loginUser,
   refreshToken,
+  deleteUser,
 };
