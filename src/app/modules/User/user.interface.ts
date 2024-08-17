@@ -12,6 +12,7 @@ export interface TUser {
   email: string;
   password: string;
   name: TUserName;
+  role: 'user' | 'admin';
 }
 
 // ======================================>>>>>>>> Login Interface

@@ -33,6 +33,10 @@ const userSchema = new Schema<TUser, UserModel>(
       required: [true, 'Password is required'],
       select: 0,
     },
+    role: {
+      type: String,
+      default: 'user',
+    },
   },
   {
     timestamps: true,

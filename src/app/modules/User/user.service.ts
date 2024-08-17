@@ -3,7 +3,7 @@ import { TLoginUser, TUser } from './user.interface';
 import { User } from './user.model';
 import { AppError } from '../../errors/AppErrors';
 import httpStatus from 'http-status';
-import { createToken } from './user.utils';
+import { createToken, verifyToken } from './user.utils';
 import config from '../../config';
 
 const createUserIntoDB = async (payload: TUser) => {
@@ -27,8 +27,8 @@ const loginUserService = async (paylod: TLoginUser) => {
   }
 
   const jwtPayload = {
-    userId: userData.id,
-    role: userData.email,
+    email: userData.email,
+    role: userData.role,
   };
   // =========== jwt এর builting function
   const accessToken = createToken(
@@ -49,7 +49,35 @@ const loginUserService = async (paylod: TLoginUser) => {
   };
 };
 
+const refreshToken = async (token: string) => {
+  if (!token) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorize!');
+  }
+
+  const decoded = verifyToken(token, config.jwt_refresh_secret as string);
+  const { email } = decoded;
+
+  // ========================================>>>>>>>>>> STATICKS method
+  const userData = await User.isUserExistsByCustomeId(email);
+
+  const jwtPayload = {
+    email: userData.email,
+    role: userData.role,
+  };
+  // =========== Auth.utils function
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
+
+  return {
+    accessToken,
+  };
+};
+
 export const UserServices = {
   createUserIntoDB,
   loginUserService,
+  refreshToken,
 };
