@@ -44,7 +44,7 @@ app.use((0, cors_1.default)({
 }));
 app.use('/api/v1', routes_1.default);
 app.get('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const a = 'test';
+    const a = 'Server Running SuccessFully';
     res.send(a);
 }));
 app.use(globalErrorHandlear_1.default);
