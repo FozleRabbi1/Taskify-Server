@@ -1,4 +1,4 @@
-# This is a simple CRUD system back-end code 
+# This is a simple CRUD operation system back-end code 
 ## if You want to try it , you can clone the repository
 * step 1 = at firse clone it
 * step 2 = install all package use yarn add / npm i
@@ -8,6 +8,21 @@
 * 
 ## Note ( This Is A Module Pattern File System Code )
 * If You Check the all CRUD operation Code , go to the Src + app + modules
+
+## Features and Functionalities
+### Product Management
+- **Create Product:**
+  - Adds a new product to the database using the provided product details.
+- **Get All Products:**
+  - Retrieves a list of all products from the database.
+  - Returns the products in reverse order.
+- **Update Product:**
+  - Updates a specific product's details by its ID.
+  - Allows partial updates to the product using provided data.
+  - Ensures updated data is validated before saving.
+- **Delete Product:**
+  - Deletes a specific product from the database by its ID.
+
   
 ## Features and Functionalities
 ### User Management
@@ -44,21 +59,16 @@
 
 
 ## Dependencies
-- `@reduxjs/toolkit`
-- `aos`
-- `framer-motion`
-- `jwt-decode`
-- `react`
-- `react-dom`
-- `react-hook-form`
-- `react-icons`
-- `react-redux`
-- `react-router-dom`
-- `react-toastify`
-- `redux-persist`
-- `resize-observer-polyfill`
-- `sweetalert2`
-- `swiper`
+- `bcrypt`
+- `cookie-parser`
+- `cors`
+- `dotenv`
+- `express`
+- `http-status`
+- `jsonwebtoken`
+- `mongoose`
+- `zod`
+
 
 
 
