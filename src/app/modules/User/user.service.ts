@@ -29,7 +29,7 @@ const updateUserRoleIntoDB = async (id: string, role: string) => {
   return result;
 };
 
-const loginUserService = async (paylod: TLoginUser) => {
+const loginUserIntoDB = async (paylod: TLoginUser) => {
   const userData = await User.isUserExistsByCustomeId(paylod.email);
 
   if (!userData) {
@@ -98,7 +98,7 @@ const deleteUserFromDB = async (id: string) => {
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
-  loginUserService,
+  loginUserIntoDB,
   updateUserRoleIntoDB,
   refreshToken,
   deleteUserFromDB,

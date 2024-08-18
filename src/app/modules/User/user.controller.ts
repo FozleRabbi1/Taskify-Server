@@ -40,7 +40,7 @@ const updateUserRole = catchAsync(async (req, res) => {
 });
 
 const loginUser = catchAsync(async (req, res) => {
-  const result = await UserServices.loginUserService(req.body);
+  const result = await UserServices.loginUserIntoDB(req.body);
   const { refreshToken, accessToken } = result;
   res.cookie('refreshToken', refreshToken, {
     secure: config.NODE_ENV === 'production',
