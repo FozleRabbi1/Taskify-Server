@@ -39,7 +39,7 @@ app.use(
 app.use('/api/v1', router);
 
 app.get('/test', async (req, res) => {
-  const a = 'test';
+  const a = 'Server Running SuccessFully';
   res.send(a);
 });
 
