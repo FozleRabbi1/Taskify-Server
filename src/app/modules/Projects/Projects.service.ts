@@ -29,7 +29,5 @@ const getAllProjects = async () => {
 
 export const ProjectsServices = {
   getAllProjects,
-  // createProductIntoDB,
-  // updateProductIntoDB,
-  // deleteProductfromDB,
+  
 };
