@@ -10,7 +10,7 @@ import { Project } from "./Projects.module";
 
 const getAllProjects = async () => {
   const result = await Project.find();
-  return result.reverse();
+  return result;
 };
 
 // const updateProductIntoDB = async (id: string, payload: Partial<IProduct>) => {

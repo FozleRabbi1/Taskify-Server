@@ -15,19 +15,19 @@ const createUserIntoDB = async (payload: TUser) => {
   return result;
 };
 
-const getAllUserFromDB = async () => {
-  const result = await User.find();
-  return result;
-};
+// const getAllUserFromDB = async () => {
+//   const result = await User.find();
+//   return result;
+// };
 
-const updateUserRoleIntoDB = async (id: string, role: string) => {
-  const result = await User.findByIdAndUpdate(
-    id,
-    { $set: { role } },
-    { new: true },
-  );
-  return result;
-};
+// const updateUserRoleIntoDB = async (id: string, role: string) => {
+//   const result = await User.findByIdAndUpdate(
+//     id,
+//     { $set: { role } },
+//     { new: true },
+//   );
+//   return result;
+// };
 
 const loginUserIntoDB = async (paylod: TLoginUser) => {
   const userData = await User.isUserExistsByCustomeId(paylod.email);
@@ -90,16 +90,10 @@ const refreshToken = async (token: string) => {
   };
 };
 
-const deleteUserFromDB = async (id: string) => {
-  const result = await User.findByIdAndDelete(id);
-  return result;
-};
+
 
 export const UserServices = {
   createUserIntoDB,
-  getAllUserFromDB,
   loginUserIntoDB,
-  updateUserRoleIntoDB,
   refreshToken,
-  deleteUserFromDB,
 };
