@@ -39,6 +39,20 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
 };
 
 
+const updateStatusProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
+
+  const updatedProject = await Project.findByIdAndUpdate(id, { status : payload }, {
+    new: true, 
+    runValidators: true,
+  });
+
+  return updatedProject
+
+};
+
+
+
+
 
 const deleteProjectsIntoDB = async (payload : any ) => {
   try {
@@ -59,5 +73,6 @@ const deleteProjectsIntoDB = async (payload : any ) => {
 export const ProjectsServices = {
   getAllProjects,
   deleteProjectsIntoDB,
-  updateFavouriteProjectIntoDB
+  updateFavouriteProjectIntoDB,
+  updateStatusProjectIntoDB
 };
