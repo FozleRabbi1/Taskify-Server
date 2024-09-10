@@ -6,10 +6,6 @@ import mongoose from "mongoose";
 import { Project } from "./Projects.module";
 import { TProjuct } from "./Projects.interface";
 
-// const createProductIntoDB = async (payload: IProduct) => {
-//   const result = await Product.create(payload);
-//   return result;
-// };
 
 const getAllProjects = async (query: any) => {  
   const result = await Project.find(query);

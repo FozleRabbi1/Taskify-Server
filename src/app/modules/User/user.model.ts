@@ -72,13 +72,3 @@ userSchema.statics.isPasswordMatched = async function (
 };
 
 export const User = model<TUser, UserModel>('User', userSchema);
-
-// {
-//   "name": {
-//     "firstName": "John",
-//     "lastName": "Doe"
-//   },
-//   "email": "john.doe@example.com",
-//   "password": "hashedpassword123",
-//   "role": "user",
-// }
