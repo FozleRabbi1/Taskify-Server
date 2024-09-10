@@ -14,7 +14,7 @@ import { ProjectsServices } from './Projects.service';
 // });
 
 const getAllProjects = catchAsync(async (req, res) => {
-  const result = await ProjectsServices.getAllProjects();
+  const result = await ProjectsServices.getAllProjects(req?.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

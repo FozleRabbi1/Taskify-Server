@@ -11,8 +11,8 @@ import { TProjuct } from "./Projects.interface";
 //   return result;
 // };
 
-const getAllProjects = async () => {
-  const result = await Project.find();
+const getAllProjects = async (query: any) => {  
+  const result = await Project.find(query);
   return result;
 };
 
