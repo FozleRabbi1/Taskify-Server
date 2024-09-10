@@ -23,6 +23,33 @@ const getAllProjects = catchAsync(async (req, res) => {
   });
 });
 
+const updateFavouriteProjects = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const isFavourite = req.body;
+  
+  const result = await ProjectsServices.updateFavouriteProjectIntoDB(id,isFavourite);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'update your favourite data',
+    data: result,
+  });
+});
+
+const deleteProjects = catchAsync(async (req, res) => {
+  const deleteIdArray = req.body.idArray;
+  const result = await ProjectsServices.deleteProjectsIntoDB(deleteIdArray );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'delete All Projects Successfully',
+    data: result,
+  });
+});
+
+
+
+
 // const updateProduct = catchAsync(async (req, res) => {
 //   const { id, ...updateFields } = req.body;
 //   const result = await ProductsServices.updateProductIntoDB(id, updateFields);
@@ -46,8 +73,11 @@ const getAllProjects = catchAsync(async (req, res) => {
 //   });
 // });
 
+
 export const projectsControllers = {
   getAllProjects,
+  deleteProjects,
+  updateFavouriteProjects
   // createProduct,
   // updateProduct,
   // deleteProduct,

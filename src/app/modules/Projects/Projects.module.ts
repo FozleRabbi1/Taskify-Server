@@ -22,10 +22,8 @@ const ProjectSchema: Schema = new Schema<TProjuct>({
   },
   budget: { type: String, required: true },
   tags: { type: [String], required: true },
-},
-{
-  timestamps: true,
-},
+  isFavourite:{ type : String, enum : ["notFavourite", "favourite"] }
+}
 );
 
 export const Project = model<TProjuct>('Project', ProjectSchema);

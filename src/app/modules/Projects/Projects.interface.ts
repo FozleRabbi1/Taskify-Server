@@ -7,4 +7,5 @@ export type TProjuct = {
   priority: "Default";
   budget: string;
   tags: string[];
+  isFavourite? : "notFavourite" | "favourite"
 };
