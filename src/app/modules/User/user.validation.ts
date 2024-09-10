@@ -23,6 +23,7 @@ const createUserValidationSchema = z.object({
         .email('Invalid email address')
         .min(1, 'Email is required'),
       role: z.string().optional().default('user'),
+      image : z.string(),
     }),
   }),
 });

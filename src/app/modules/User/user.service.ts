@@ -15,19 +15,12 @@ const createUserIntoDB = async (payload: TUser) => {
   return result;
 };
 
-// const getAllUserFromDB = async () => {
-//   const result = await User.find();
-//   return result;
-// };
 
-// const updateUserRoleIntoDB = async (id: string, role: string) => {
-//   const result = await User.findByIdAndUpdate(
-//     id,
-//     { $set: { role } },
-//     { new: true },
-//   );
-//   return result;
-// };
+const findSingleUserIntoDB = async (email : string) => {
+  const result = await User.findOne({ email }); 
+  return result;
+};
+
 
 const loginUserIntoDB = async (paylod: TLoginUser) => {
   const userData = await User.isUserExistsByCustomeId(paylod.email);
@@ -90,10 +83,9 @@ const refreshToken = async (token: string) => {
   };
 };
 
-
-
 export const UserServices = {
   createUserIntoDB,
   loginUserIntoDB,
   refreshToken,
+  findSingleUserIntoDB
 };

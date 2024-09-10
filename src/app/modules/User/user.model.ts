@@ -37,6 +37,10 @@ const userSchema = new Schema<TUser, UserModel>(
       type: String,
       default: 'user',
     },
+    image : {
+      type : String,
+      require : [true, "Image is required"]
+    }
   },
   {
     timestamps: true,

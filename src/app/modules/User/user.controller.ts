@@ -4,8 +4,19 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
 import config from '../../config';
 
+const getSingleUser = catchAsync(async (req, res) => {
+  const email = req.params.email;  
+  const result = await UserServices.findSingleUserIntoDB(email);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Get single User successFully',
+    data: result,
+  });
+});
+
 const createUser = catchAsync(async (req, res) => {
-  const { user: userData } = req.body;
+  const { user: userData } = req.body;  
   const result = await UserServices.createUserIntoDB(userData);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -44,10 +55,8 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 
 export const userController = {
+  getSingleUser,
   createUser,
-  // gatAllUsers,
-  // updateUserRole,
   loginUser,
   refreshToken,
-  // deleteUser,
 };

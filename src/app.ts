@@ -26,7 +26,6 @@ import cookieParser from 'cookie-parser';
 import globalErrorHandler from './app/middleware/globalErrorHandlear';
 const app: Application = express();
 
-//parser
 app.use(express.json());
 app.use(cookieParser());
 app.use(

@@ -40,14 +40,11 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
 
 
 const updateStatusProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
-
   const updatedProject = await Project.findByIdAndUpdate(id, { status : payload }, {
     new: true, 
     runValidators: true,
   });
-
   return updatedProject
-
 };
 
 
