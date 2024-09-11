@@ -5,23 +5,6 @@ import { Project } from "./Projects.module";
 import { TProjuct } from "./Projects.interface";
 import QueryBuilder from "../../builder/QueryBuilder";
 
-
-// const getAllProjects = async (query: Record<string, unknown>) => {
-//   console.log(query);
-  
-//   const studentQuery = new QueryBuilder(
-//     Project.find() , query,
-//   )
-//     .search(["title"])
-//     .filter()
-//     .sort()
-//     // .paginate()
-//     .fields();
-
-//   const result = await studentQuery.modelQuery;
-//   return  result;
-// };
-
 interface DateRangeQuery {
   firstDate?: Date;
   secondDate?: Date;
@@ -29,29 +12,25 @@ interface DateRangeQuery {
 
 
 const getAllProjects = async (query: Record<string, unknown>) => {  
-  
   if (query.date) {
     const dateRange = query.date as string;
     const [startDateString, endDateString] = dateRange.split(',');
-
     const startDate = new Date(startDateString);
     const endDate = new Date(endDateString);
 
-    query.createdAt = {
+    query.dateInfo = {
       firstDate: startDate,
       secondDate: endDate,
-    } as DateRangeQuery;
-    
+    } as DateRangeQuery;    
     delete query.date;
   }
 
-  if (query.createdAt) {
-    const { firstDate, secondDate } = query.createdAt as DateRangeQuery;
-
+  if (query.dateInfo) {
+    const { firstDate, secondDate } = query.dateInfo as DateRangeQuery;
     const result = await Project.aggregate([
       {
         $addFields: {
-          createdAtISO: {
+          dateAtISO: {
             $dateFromString: {
               dateString: `$${query.fieldName}`,
               format: "%B %d, %Y", 
@@ -61,7 +40,7 @@ const getAllProjects = async (query: Record<string, unknown>) => {
       },
       {
         $match: {
-          createdAtISO: {
+          dateAtISO: {
             $gte: firstDate,
             $lte: secondDate,
           },
@@ -83,63 +62,92 @@ const getAllProjects = async (query: Record<string, unknown>) => {
   return result;
 };
 
-// const getAllProjects = async (query: Record<string, unknown>) => {
-//   // const { firstDate, secondDate } = query as { firstDate: string, secondDate: string };
-//   console.log(query);
 
-//   if (query.date) {
-//         const dateRange = query.date as string;
-//         const [startDateString, endDateString] = dateRange.split(',');
-        
-//   console.log(startDateString);
-//   console.log(endDateString);
-//   }
+// const duplicateDataIntoDB  = async(mainId : string, title : string) =>{
+    
+//   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
+//    const lastDocumentId = lastDocument?.id;
+     
+//   try {
+//     const project = await Project.findById({_id : mainId});
+//     if (!project) {
+//       throw new Error('Project not found');
+//     }
+//     const newProjectData = project.toObject();
+//     delete newProjectData._id;
 
-  
+    
+//     const createdAt = new Date();
+//     const updatedAt = new Date();
 
-//   // if (firstDate && secondDate) {
-//   //   const startDate = new Date(firstDate);
-//   //   const endDate = new Date(secondDate);
+//     const duplicatedProject = new Project(newProjectData);
+//     const {users,clients, status, priority , budget, tags} = duplicatedProject
+//     const newData = {
+//       title ,
+//       id : lastDocumentId + 1,
+//       users,
+//       clients, 
+//       status, 
+//       priority, 
+//       budget,
+//       tags,
+//       createdAt,
+//       updatedAt      
+//     }
 
-//   //   // Build a query to convert `createdAt` field to a Date object and then filter by the range
-//   //   const result = await Project.aggregate([
-//   //     {
-//   //       $addFields: {
-//   //         createdAtISO: {
-//   //           $dateFromString: {
-//   //             dateString: "$createdAt",
-//   //             format: "%B %d, %Y", // Format that matches your `createdAt` field (e.g., "September 07, 2024")
-//   //           },
-//   //         },
-//   //       },
-//   //     },
-//   //     {
-//   //       $match: {
-//   //         createdAtISO: {
-//   //           $gte: startDate,
-//   //           $lte: endDate,
-//   //         },
-//   //       },
-//   //     },
-//   //   ]);
+//     console.log(newData);  
+//     // await duplicatedProject.save();
+//     // return duplicatedProject;
+//   } catch (error) {
+//     console.error('Error duplicating project:', error);
+//   }  
 
-//   //   console.log(result);
-//   //   return result;
-//   // }
+// }
 
-  
-//   // If no date range is provided, return all projects
-  
-  
-//   const studentQuery = new QueryBuilder(Project.find(), query)
-//     .search(["title"])
-//     .filter()
-//     .sort()
-//     .fields();
+const formatDate = (date) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Intl.DateTimeFormat('en-US', options).format(date);
+};
 
-//   const result = await studentQuery.modelQuery;
-//   return result;
-// };
+const duplicateDataIntoDB = async (mainId: string, title: string) => {
+  try {
+    // Find the most recent document to get the lastDocumentId
+    const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
+    const lastDocumentId = lastDocument?.id || 0;
+
+    // Find the project to duplicate
+    const project = await Project.findById(mainId);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+    
+    // Convert project data to a plain object and remove the _id field
+    const newProjectData = project.toObject();
+    delete newProjectData._id;
+
+    // Create new dates
+    const startsAt = formatDate(new Date());
+    const endsAt = formatDate(new Date());
+
+    // Create a new project with the updated data
+    const newProject = new Project({
+      ...newProjectData,
+      title,
+      id: lastDocumentId + 1,
+      startsAt, 
+      endsAt  
+    });
+
+    // Save the new project to the database
+    await newProject.save();
+    return newProject;
+  } catch (error) {
+    console.error('Error duplicating project:', error);
+    throw error; 
+  }
+};
+
+
 
 
 
@@ -196,6 +204,7 @@ const deleteProjectsIntoDB = async (payload : any ) => {
 
 export const ProjectsServices = {
   getAllProjects,
+  duplicateDataIntoDB,
   deleteProjectsIntoDB,
   getAllFavouriteProjects,
   updateFavouriteProjectIntoDB,

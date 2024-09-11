@@ -13,6 +13,21 @@ const getAllProjects = catchAsync(async (req, res) => {
   });
 });
 
+
+const duplicateData = catchAsync(async (req, res) => {
+  const id = req.params.id
+  const title = req.body.title
+  
+  const result = await ProjectsServices.duplicateDataIntoDB(id, title);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Duplicate Projects Successfully',
+    data: result,
+  });
+});
+
+
 const getAllFavourite = catchAsync(async (req, res) => {
   const result = await ProjectsServices.getAllFavouriteProjects();
   sendResponse(res, {
@@ -62,6 +77,7 @@ const deleteProjects = catchAsync(async (req, res) => {
 
 export const projectsControllers = {
   getAllProjects,
+  duplicateData,
   getAllFavourite,
   deleteProjects,
   updateFavouriteProjects,
