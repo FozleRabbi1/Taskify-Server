@@ -28,7 +28,8 @@ interface DateRangeQuery {
 }
 
 
-const getAllProjects = async (query: Record<string, unknown>) => {
+const getAllProjects = async (query: Record<string, unknown>) => {  
+  
   if (query.date) {
     const dateRange = query.date as string;
     const [startDateString, endDateString] = dateRange.split(',');
@@ -52,7 +53,7 @@ const getAllProjects = async (query: Record<string, unknown>) => {
         $addFields: {
           createdAtISO: {
             $dateFromString: {
-              dateString: "$createdAt",
+              dateString: `$${query.fieldName}`,
               format: "%B %d, %Y", 
             },
           },
