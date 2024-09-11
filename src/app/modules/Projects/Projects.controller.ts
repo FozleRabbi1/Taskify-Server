@@ -3,8 +3,6 @@ import { catchAsync } from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { ProjectsServices } from './Projects.service';
 
-
-
 const getAllProjects = catchAsync(async (req, res) => {
   const result = await ProjectsServices.getAllProjects(req?.query);
   sendResponse(res, {
@@ -61,8 +59,6 @@ const deleteProjects = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
-
 
 export const projectsControllers = {
   getAllProjects,
