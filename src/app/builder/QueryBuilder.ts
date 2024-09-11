@@ -11,8 +11,7 @@ class QueryBuilder<T> {
 
   search(searchableFields: string[]) {
     const searchTerm = this?.query?.searchTerm;
-    // console.log(searchTerm);
-    // console.log(searchableFields);
+
     if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
         $or: searchableFields.map(
@@ -28,38 +27,18 @@ class QueryBuilder<T> {
 
   filter() {
     const queryObj = { ...this.query }; // copy query
-    const excluedeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-    excluedeFields.forEach((el) => delete queryObj[el]); // exat match করবে এমন filed রাখা হয়েছে(email)
+    const excluedeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields', "title"];
+    excluedeFields.forEach((el) => delete queryObj[el]); // exat match করবে একমন filed রাখা হয়েছে(email)
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
     return this;
   }
 
-  // filter() {
-  //   const queryObj = { ...this.query }; // copy query
-  //   const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-  //   excludeFields.forEach((el) => delete queryObj[el]); // remove exact match fields
-
-  //   // Handle price range filtering
-  //   if (queryObj.minPrice && queryObj.maxPrice) {
-  //     queryObj.price = {
-  //       $gte: parseInt(queryObj.minPrice),
-  //       $lte: parseInt(queryObj.maxPrice),
-  //     };
-  //   }
-
-  //   this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
-  //   return this;
-  // }
-
-  // sort(sortt) {
-  //   // const sort =
-  //   //   (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
-  //   console.log(sortt);
-  //   const assenDessenSort = sortt === 'ascending' ? -1 : 1;
-
-  //   this.modelQuery = this.modelQuery.sort(assenDessenSort);
-  //   return this;
-  // }
+  sort() {
+    const sort =
+      (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
+    this.modelQuery = this.modelQuery.sort(sort as string);
+    return this;
+  }
 
   paginate() {
     const page = Number(this?.query?.page) || 1;
@@ -74,6 +53,22 @@ class QueryBuilder<T> {
       (this?.query?.fields as string)?.split(',')?.join(' ') || '-__v';
     this.modelQuery = this.modelQuery.select(fields);
     return this;
+  }
+
+  async countTotal() {
+    // (getFilter) এর সাহায্যে আমরা সকল প্রকার query পাউয়া যাবে(vdo:6.10 M20.11)
+    const TotalQuery = this.modelQuery.getFilter();
+    const total = await this.modelQuery.model.countDocuments(TotalQuery);
+    const page = Number(this?.query?.page) || 1;
+    const limit = Number(this?.query?.limit) || 10;
+    const totalPage = Math.ceil(total / limit);
+
+    return {
+      total,
+      page,
+      limit,
+      totalPage,
+    };
   }
 }
 

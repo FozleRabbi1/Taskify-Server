@@ -5,12 +5,31 @@
 import mongoose from "mongoose";
 import { Project } from "./Projects.module";
 import { TProjuct } from "./Projects.interface";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 
-const getAllProjects = async (query: any) => {  
-  const result = await Project.find(query);
-  return result;
+// const getAllProjects = async (query: any) => {  
+
+//   const result = await Project.find(query);
+
+//   return result;
+// };
+
+const getAllProjects = async (query: Record<string, unknown>) => {
+  const studentQuery = new QueryBuilder(
+    Project.find() , query,
+  )
+    .search(["title"])
+    .filter()
+    // .sort("id")
+    // .paginate()
+    .fields();
+
+  const result = await studentQuery.modelQuery;
+  return  result;
 };
+
+
 
 const getAllFavouriteProjects = async () => {  
   const result = await Project.find({isFavourite : "true"});
