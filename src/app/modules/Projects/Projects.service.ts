@@ -12,6 +12,11 @@ const getAllProjects = async (query: any) => {
   return result;
 };
 
+const getAllFavouriteProjects = async () => {  
+  const result = await Project.find({isFavourite : "true"});
+  return result;
+};
+
 
 const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
   try {
@@ -35,8 +40,9 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
 };
 
 
-const updateStatusProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
-  const updatedProject = await Project.findByIdAndUpdate(id, { status : payload }, {
+const updateProjectIntoDB = async (id: string, keyName : string , payload: Partial<TProjuct>) => {
+  const update = { [keyName]: payload };
+  const updatedProject = await Project.findByIdAndUpdate(id, update, {
     new: true, 
     runValidators: true,
   });
@@ -66,6 +72,7 @@ const deleteProjectsIntoDB = async (payload : any ) => {
 export const ProjectsServices = {
   getAllProjects,
   deleteProjectsIntoDB,
+  getAllFavouriteProjects,
   updateFavouriteProjectIntoDB,
-  updateStatusProjectIntoDB
+  updateProjectIntoDB
 };

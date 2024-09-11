@@ -12,12 +12,12 @@ const ProjectSchema: Schema = new Schema<TProjuct>({
   clients: { type: [String], required: true },
   status: { 
     type: String, 
-    enum: ["On Going", "Started", "Default", "In Review"], 
+    enum: ["On Going", "Started", "Default", "In Review", "Completed"], 
     required: true 
   },
   priority: { 
     type: String, 
-    enum: ["Default"], 
+    enum: ["Default", "High", "Medium", "Low"], 
     required: true 
   },
   budget: { type: String, required: true },

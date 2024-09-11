@@ -15,6 +15,16 @@ const getAllProjects = catchAsync(async (req, res) => {
   });
 });
 
+const getAllFavourite = catchAsync(async (req, res) => {
+  const result = await ProjectsServices.getAllFavouriteProjects();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Get All Projects Successfully',
+    data: result,
+  });
+});
+
 const updateFavouriteProjects = catchAsync(async (req, res) => {
   const id = req.params.id;
   const isFavourite = req.body;  
@@ -27,10 +37,11 @@ const updateFavouriteProjects = catchAsync(async (req, res) => {
   });
 });
 
-const updateStatusProjects = catchAsync(async (req, res) => {
+const updatesProjectsInfo = catchAsync(async (req, res) => {
   const id = req.params.id;
+  const keyName = req.body.keyName;  
   const status = req.body.selectedStatus;  
-  const result = await ProjectsServices.updateStatusProjectIntoDB(id,status);
+  const result = await ProjectsServices.updateProjectIntoDB(id,keyName,status);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -55,8 +66,8 @@ const deleteProjects = catchAsync(async (req, res) => {
 
 export const projectsControllers = {
   getAllProjects,
+  getAllFavourite,
   deleteProjects,
   updateFavouriteProjects,
-  updateStatusProjects
-  
+  updatesProjectsInfo  
 };
