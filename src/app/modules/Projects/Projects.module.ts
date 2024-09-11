@@ -3,7 +3,7 @@ import { TProjuct } from './Projects.interface';
 
 const ProjectSchema: Schema = new Schema<TProjuct>({
   id: {
-    type: String,
+    type: Number,
     required: [true, 'User ID is required'],
     unique: true,
   },

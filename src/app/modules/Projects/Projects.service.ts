@@ -21,14 +21,13 @@ const getAllProjects = async (query: Record<string, unknown>) => {
   )
     .search(["title"])
     .filter()
-    // .sort("id")
+    .sort()
     // .paginate()
     .fields();
 
   const result = await studentQuery.modelQuery;
   return  result;
 };
-
 
 
 const getAllFavouriteProjects = async () => {  
@@ -58,7 +57,6 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
   }
 };
 
-
 const updateProjectIntoDB = async (id: string, keyName : string , payload: Partial<TProjuct>) => {
   const update = { [keyName]: payload };
   const updatedProject = await Project.findByIdAndUpdate(id, update, {
@@ -67,9 +65,6 @@ const updateProjectIntoDB = async (id: string, keyName : string , payload: Parti
   });
   return updatedProject
 };
-
-
-
 
 
 const deleteProjectsIntoDB = async (payload : any ) => {

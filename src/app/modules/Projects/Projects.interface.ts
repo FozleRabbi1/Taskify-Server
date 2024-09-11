@@ -1,5 +1,5 @@
 export type TProjuct = {
-  id: string;
+  id: number;
   title: string;
   users: string[];
   clients: string[];
