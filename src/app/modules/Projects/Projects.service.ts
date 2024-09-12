@@ -65,20 +65,17 @@ const getAllProjects = async (query: Record<string, unknown>) => {
 
 const duplicateDataIntoDB = async (mainId: string, title: string) => {
   try {
-    // Find the most recent document to get the lastDocumentId
     const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
     const lastDocumentId = lastDocument?.id || 0;
 
-    // Find the project to duplicate
     const project = await Project.findById(mainId);
     if (!project) {
       throw new Error('Project not found');
     }
     
-    const newProjectData = project.toObject();
+    const newProjectData = project.toObject() as Partial<typeof project> & { _id?: mongoose.Types.ObjectId };
     delete newProjectData._id;
 
-    // Directly assign the formatted date strings
     const startsAt = "September 27, 2024";
     const endsAt = "October 02, 2024";
 
@@ -89,8 +86,6 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
       startsAt, 
       endsAt  
     });
-    
-    // Save the new project to the database
     await newProject.save();
     return newProject;
   } catch (error) {
