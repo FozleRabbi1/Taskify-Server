@@ -53,7 +53,8 @@ const updateFavouriteProjects = catchAsync(async (req, res) => {
 const updatesProjectsInfo = catchAsync(async (req, res) => {
   const id = req.params.id;
   const keyName = req.body.keyName;  
-  const status = req.body.selectedStatus;  
+  const status = req.body.selectedStatus;
+  
   const result = await ProjectsServices.updateProjectIntoDB(id,keyName,status);
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -104,10 +104,50 @@ const getAllProjects = async (query: Record<string, unknown>) => {
 
 // }
 
-const formatDate = (date) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Intl.DateTimeFormat('en-US', options).format(date);
-};
+
+
+// const duplicateDataIntoDB = async (mainId: string, title: string) => {
+//   try {
+//     // Find the most recent document to get the lastDocumentId
+//     const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
+//     const lastDocumentId = lastDocument?.id || 0;
+
+//     // Find the project to duplicate
+//     const project = await Project.findById(mainId);
+//     if (!project) {
+//       throw new Error('Project not found');
+//     }
+    
+//     const newProjectData = project.toObject();
+//     delete newProjectData._id;
+
+//     const formatDate = (date) => {
+//       const options = { year: 'numeric', month: 'long', day: 'numeric' };
+//       return new Intl.DateTimeFormat('en-US', options).format(date);
+//     };
+
+//     const startsAt = formatDate(new Date());
+//     const endsAt = formatDate(new Date());
+
+//     const newProject = new Project({
+//       ...newProjectData,
+//       title,
+//       id: lastDocumentId + 1,
+//       startsAt, 
+//       endsAt  
+//     });
+
+//     console.log(newProject);
+    
+
+//     // Save the new project to the database
+//     await newProject.save();
+//     return newProject;
+//   } catch (error) {
+//     console.error('Error duplicating project:', error);
+//     throw error; 
+//   }
+// };
 
 const duplicateDataIntoDB = async (mainId: string, title: string) => {
   try {
@@ -121,15 +161,13 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
       throw new Error('Project not found');
     }
     
-    // Convert project data to a plain object and remove the _id field
     const newProjectData = project.toObject();
     delete newProjectData._id;
 
-    // Create new dates
-    const startsAt = formatDate(new Date());
-    const endsAt = formatDate(new Date());
+    // Directly assign the formatted date strings
+    const startsAt = "September 27, 2024";
+    const endsAt = "October 02, 2024";
 
-    // Create a new project with the updated data
     const newProject = new Project({
       ...newProjectData,
       title,
@@ -137,7 +175,7 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
       startsAt, 
       endsAt  
     });
-
+    
     // Save the new project to the database
     await newProject.save();
     return newProject;
@@ -146,10 +184,6 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
     throw error; 
   }
 };
-
-
-
-
 
 
 const getAllFavouriteProjects = async () => {  
@@ -178,7 +212,7 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
   }
 };
 
-const updateProjectIntoDB = async (id: string, keyName : string , payload: Partial<TProjuct>) => {
+const updateProjectIntoDB = async (id: string, keyName : string , payload: Partial<TProjuct>) => {  
   const update = { [keyName]: payload };
   const updatedProject = await Project.findByIdAndUpdate(id, update, {
     new: true, 
