@@ -11,7 +11,60 @@ interface DateRangeQuery {
 }
 
 
-const getAllProjects = async (query: Record<string, unknown>) => {  
+// const getAllProjects = async (query: Record<string, unknown>) => {  
+//   console.log(query.date);
+  
+//   if (query.date) {
+//     const dateRange = query.date as string;
+//     const [startDateString, endDateString] = dateRange.split(',');
+//     const startDate = new Date(startDateString);
+//     const endDate = new Date(endDateString);
+
+//     query.dateInfo = {
+//       firstDate: startDate,
+//       secondDate: endDate,
+//     } as DateRangeQuery;    
+//     delete query.date;
+//   }
+
+//   if (query.dateInfo) {
+//     const { firstDate, secondDate } = query.dateInfo as DateRangeQuery;
+//     const result = await Project.aggregate([
+//       {
+//         $addFields: {
+//           dateAtISO: {
+//             $dateFromString: {
+//               dateString: `$${query.fieldName}`,
+//               format: "%B %d, %Y", 
+//             },
+//           },
+//         },
+//       },
+//       {
+//         $match: {
+//           dateAtISO: {
+//             $gte: firstDate,
+//             $lte: secondDate,
+//           },
+//         },
+//       },
+//     ]);  
+//     return result;
+//   } 
+
+//   const studentQuery = new QueryBuilder(
+//     Project.find(), query,
+//   )
+//     .search(["title"])
+//     .filter()
+//     .sort()
+//     .fields();
+  
+//   const result = await studentQuery.modelQuery;
+//   return result;
+// };
+
+const getAllProjects = async (query: Record<string, unknown>) => {
   if (query.date) {
     const dateRange = query.date as string;
     const [startDateString, endDateString] = dateRange.split(',');
@@ -29,18 +82,8 @@ const getAllProjects = async (query: Record<string, unknown>) => {
     const { firstDate, secondDate } = query.dateInfo as DateRangeQuery;
     const result = await Project.aggregate([
       {
-        $addFields: {
-          dateAtISO: {
-            $dateFromString: {
-              dateString: `$${query.fieldName}`,
-              format: "%B %d, %Y", 
-            },
-          },
-        },
-      },
-      {
         $match: {
-          dateAtISO: {
+          [query.fieldName as string]: {
             $gte: firstDate,
             $lte: secondDate,
           },
@@ -62,7 +105,6 @@ const getAllProjects = async (query: Record<string, unknown>) => {
   return result;
 };
 
-
 const duplicateDataIntoDB = async (mainId: string, title: string) => {
   try {
     const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
@@ -76,16 +118,20 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
     const newProjectData = project.toObject() as Partial<typeof project> & { _id?: mongoose.Types.ObjectId };
     delete newProjectData._id;
 
-    const startsAt = "September 27, 2024";
-    const endsAt = "October 02, 2024";
+    const startsAt = new Date();
+    const endsAt = new Date(startsAt);
+    endsAt.setDate(startsAt.getDate() + 5);
+
+    const formatDate = (date: Date) => date.toISOString(); 
 
     const newProject = new Project({
       ...newProjectData,
       title,
       id: lastDocumentId + 1,
-      startsAt, 
-      endsAt  
+      startsAt: formatDate(startsAt), 
+      endsAt: formatDate(endsAt)  
     });
+    
     await newProject.save();
     return newProject;
   } catch (error) {
@@ -93,6 +139,7 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
     throw error; 
   }
 };
+
 
 
 const getAllFavouriteProjects = async () => {  
