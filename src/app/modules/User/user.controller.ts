@@ -15,6 +15,16 @@ const getSingleUser = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUser = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllUserFromDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Get All Users successFully',
+    data: result,
+  });
+});
+
 const createUser = catchAsync(async (req, res) => {
   const { user: userData } = req.body;  
   const result = await UserServices.createUserIntoDB(userData);
@@ -56,6 +66,7 @@ const refreshToken = catchAsync(async (req, res) => {
 
 export const userController = {
   getSingleUser,
+  getAllUser,
   createUser,
   loginUser,
   refreshToken,

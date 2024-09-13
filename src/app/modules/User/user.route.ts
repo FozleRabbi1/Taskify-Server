@@ -6,6 +6,11 @@ import { validateRequest } from '../../middleware/validateRequest';
 const router = express.Router();
 
 router.get(
+  '/',
+  userController.getAllUser,
+);
+
+router.get(
   '/:email',
   userController.getSingleUser,
 );

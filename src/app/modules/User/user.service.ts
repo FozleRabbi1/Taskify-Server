@@ -16,6 +16,10 @@ const createUserIntoDB = async (payload: TUser) => {
 };
 
 
+const getAllUserFromDB = async () => {
+  const result = await User.find(); 
+  return result;
+};
 const findSingleUserIntoDB = async (email : string) => {
   const result = await User.findOne({ email }); 
   return result;
@@ -85,6 +89,7 @@ const refreshToken = async (token: string) => {
 
 export const UserServices = {
   createUserIntoDB,
+  getAllUserFromDB,
   loginUserIntoDB,
   refreshToken,
   findSingleUserIntoDB
