@@ -11,60 +11,6 @@ interface DateRangeQuery {
 }
 
 
-// const getAllProjects = async (query: Record<string, unknown>) => {  
-//   console.log(query.date);
-  
-//   if (query.date) {
-//     const dateRange = query.date as string;
-//     const [startDateString, endDateString] = dateRange.split(',');
-//     const startDate = new Date(startDateString);
-//     const endDate = new Date(endDateString);
-
-//     query.dateInfo = {
-//       firstDate: startDate,
-//       secondDate: endDate,
-//     } as DateRangeQuery;    
-//     delete query.date;
-//   }
-
-//   if (query.dateInfo) {
-//     const { firstDate, secondDate } = query.dateInfo as DateRangeQuery;
-//     const result = await Project.aggregate([
-//       {
-//         $addFields: {
-//           dateAtISO: {
-//             $dateFromString: {
-//               dateString: `$${query.fieldName}`,
-//               format: "%B %d, %Y", 
-//             },
-//           },
-//         },
-//       },
-//       {
-//         $match: {
-//           dateAtISO: {
-//             $gte: firstDate,
-//             $lte: secondDate,
-//           },
-//         },
-//       },
-//     ]);  
-//     return result;
-//   } 
-
-//   const studentQuery = new QueryBuilder(
-//     Project.find(), query,
-//   )
-//     .search(["title"])
-//     .filter()
-//     .sort()
-//     .fields();
-  
-//   const result = await studentQuery.modelQuery;
-//   return result;
-// };
-
-
 const getAllProjects = async (query: Record<string, unknown>) => {
   if (query.date) {
     const dateRange = query.date as string;
@@ -106,6 +52,7 @@ const getAllProjects = async (query: Record<string, unknown>) => {
   return result.reverse();
 };
 
+
 const duplicateDataIntoDB = async (mainId: string, title: string) => {
 
   try {
@@ -141,7 +88,6 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
     throw error; 
   }
 };
-
 
 
 const getAllFavouriteProjects = async () => {  
