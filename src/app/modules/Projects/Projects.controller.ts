@@ -17,7 +17,6 @@ const getAllProjects = catchAsync(async (req, res) => {
 const duplicateData = catchAsync(async (req, res) => {
   const id = req.params.id
   const title = req.body.title
-  
   const result = await ProjectsServices.duplicateDataIntoDB(id, title);
   sendResponse(res, {
     statusCode: httpStatus.OK,

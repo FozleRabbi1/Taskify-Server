@@ -64,6 +64,7 @@ interface DateRangeQuery {
 //   return result;
 // };
 
+
 const getAllProjects = async (query: Record<string, unknown>) => {
   if (query.date) {
     const dateRange = query.date as string;
@@ -90,7 +91,7 @@ const getAllProjects = async (query: Record<string, unknown>) => {
         },
       },
     ]);  
-    return result;
+    return result.reverse();
   } 
 
   const studentQuery = new QueryBuilder(
@@ -102,10 +103,11 @@ const getAllProjects = async (query: Record<string, unknown>) => {
     .fields();
   
   const result = await studentQuery.modelQuery;
-  return result;
+  return result.reverse();
 };
 
 const duplicateDataIntoDB = async (mainId: string, title: string) => {
+
   try {
     const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
     const lastDocumentId = lastDocument?.id || 0;
@@ -116,7 +118,7 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
     }
     
     const newProjectData = project.toObject() as Partial<typeof project> & { _id?: mongoose.Types.ObjectId };
-    delete newProjectData._id;
+    delete newProjectData._id;    
 
     const startsAt = new Date();
     const endsAt = new Date(startsAt);
@@ -130,7 +132,7 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
       id: lastDocumentId + 1,
       startsAt: formatDate(startsAt), 
       endsAt: formatDate(endsAt)  
-    });
+    });   
     
     await newProject.save();
     return newProject;
