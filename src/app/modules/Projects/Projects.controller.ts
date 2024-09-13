@@ -49,6 +49,18 @@ const updateFavouriteProjects = catchAsync(async (req, res) => {
   });
 });
 
+const updateSingleProjects = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const updateData = req.body;  
+  const result = await ProjectsServices.updateMainProjectsSingleDataIntoDB(id,updateData);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'update your Projects',
+    data: result,
+  });
+});
+
 const updatesProjectsInfo = catchAsync(async (req, res) => {
   const id = req.params.id;
   const keyName = req.body.keyName;  
@@ -79,6 +91,7 @@ export const projectsControllers = {
   duplicateData,
   getAllFavourite,
   deleteProjects,
+  updateSingleProjects,
   updateFavouriteProjects,
   updatesProjectsInfo  
 };

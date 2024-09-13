@@ -10,7 +10,6 @@ interface DateRangeQuery {
   secondDate?: Date;
 }
 
-
 const getAllProjects = async (query: Record<string, unknown>) => {
   if (query.date) {
     const dateRange = query.date as string;
@@ -95,6 +94,7 @@ const getAllFavouriteProjects = async () => {
   return result;
 };
 
+
 const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
   try {
     const updateData = { ...payload };
@@ -115,6 +115,16 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
     console.error("Error updating project:", error);
   }
 };
+
+
+const updateMainProjectsSingleDataIntoDB = async (id : string , payload : Partial<TProjuct> ) =>{
+  const result =  await Project.findByIdAndUpdate(id, payload, {
+    new : true,
+    runValidators : true
+  })
+  return result
+}
+
 
 const updateProjectIntoDB = async (id: string, keyName : string , payload: Partial<TProjuct>) => {  
   const update = { [keyName]: payload };
@@ -145,6 +155,7 @@ export const ProjectsServices = {
   duplicateDataIntoDB,
   deleteProjectsIntoDB,
   getAllFavouriteProjects,
+  updateMainProjectsSingleDataIntoDB,
   updateFavouriteProjectIntoDB,
   updateProjectIntoDB
 };
