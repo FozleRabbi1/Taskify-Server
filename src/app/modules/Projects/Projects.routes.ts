@@ -3,6 +3,7 @@ import { projectsControllers } from './Projects.controller';
 
 const router = express.Router();
 
+router.get('/totalDataCount', projectsControllers.totalDataCount);
 router.patch('/singleProject/:id', projectsControllers.updateSingleProjects);
 router.put('/:id', projectsControllers.updatesProjectsInfo);
 router.post('/:id', projectsControllers.duplicateData);

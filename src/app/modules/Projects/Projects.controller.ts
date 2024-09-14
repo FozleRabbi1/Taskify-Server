@@ -86,6 +86,16 @@ const deleteProjects = catchAsync(async (req, res) => {
   });
 });
 
+const totalDataCount = catchAsync(async (req, res) => {
+  const result = await ProjectsServices.totalDataCountIntoDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'count All data Successfully',
+    data: result,
+  });
+});
+
 export const projectsControllers = {
   getAllProjects,
   duplicateData,
@@ -93,5 +103,6 @@ export const projectsControllers = {
   deleteProjects,
   updateSingleProjects,
   updateFavouriteProjects,
-  updatesProjectsInfo  
+  updatesProjectsInfo,
+  totalDataCount
 };

@@ -4,11 +4,88 @@ import mongoose from "mongoose";
 import { Project } from "./Projects.module";
 import { TProjuct } from "./Projects.interface";
 import QueryBuilder from "../../builder/QueryBuilder";
+import { Todos } from "../Todos/Todos.module";
 
 interface DateRangeQuery {
   firstDate?: Date;
   secondDate?: Date;
 }
+
+
+// const totalDataCountIntoDB = async() =>{
+//   const OnGoing = await Project.find({ status: "On Going" }).select("status")
+//   const Completed = await Project.find({ status: "Completed" }).select("status")
+//   const Started = await Project.find({ status: "Started" }).select("status")
+//   const InReview = await Project.find({ status: "In Review" }).select("status")
+//   const Default = await Project.find({ status: "Default" }).select("status")
+
+
+//   const checkedDataTrue = await Todos.find({ checked: "true" }).select("checked")
+//   const checkedDataFalse = await Todos.find({ checked: "false" }).select("checked")
+
+
+//   const allProjectsData = {
+//     ongoing : { status : "On Going" , onGoing : OnGoing.length },
+//     Completed : { status : "Completed" , completed : Completed.length },
+//     Started : { status : "Started" , started : Started.length },
+//     InReview : { status : "In Review" , inReview : InReview.length },
+//     Default : { status : "Default" , default : Default.length },
+//   }
+
+//   const allTasksData = {
+//     ongoing : { status : "On Going" , onGoing : OnGoing.length + 2 },
+//     Completed : { status : "Completed" , completed : Completed.length + 2 },
+//     Started : { status : "Started" , started : Started.length + 2 },
+//     InReview : { status : "In Review" , inReview : InReview.length + 2 },
+//     Default : { status : "Default" , default : Default.length + 2 },
+//   }
+
+//   const todoData = {
+//     checked : checkedDataTrue.length,
+//     removeChacked : checkedDataFalse.length
+//   } 
+
+//   return {allProjectsData, allTasksData , todoData}  
+// }
+
+
+const totalDataCountIntoDB = async () => {
+  const [onGoing, completed, started, inReview, defaultStatus, checkedTrue, checkedFalse] = await Promise.all([
+    Project.find({ status: "On Going" }).countDocuments(),
+    Project.find({ status: "Completed" }).countDocuments(),
+    Project.find({ status: "Started" }).countDocuments(),
+    Project.find({ status: "In Review" }).countDocuments(),
+    Project.find({ status: "Default" }).countDocuments(),
+    Todos.find({ checked: "true" }).countDocuments(),
+    Todos.find({ checked: "false" }).countDocuments(),
+  ]);
+
+  const projectData = {
+    OnGoing: onGoing,
+    Completed: completed,
+    Started: started,
+    InReview: inReview,
+    Default: defaultStatus,
+  };
+
+  const allTasksData = {
+    OnGoing: onGoing + 2,
+    Completed: completed + 3,
+    Started: started + 1,
+    InReview: inReview + 2,
+    Default: defaultStatus + 6,
+  };
+
+  const todoData = {
+    CheckedTrue: checkedTrue,
+    CheckedFalse: checkedFalse,
+  };
+  
+  return { projectData, todoData, allTasksData };
+};
+
+
+
 
 const getAllProjects = async (query: Record<string, unknown>) => {
   if (query.date) {
@@ -88,7 +165,6 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
   }
 };
 
-
 const getAllFavouriteProjects = async () => {  
   const result = await Project.find({isFavourite : "true"});
   return result;
@@ -116,7 +192,6 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
   }
 };
 
-
 const updateMainProjectsSingleDataIntoDB = async (id : string , payload : Partial<TProjuct> ) =>{
   const result =  await Project.findByIdAndUpdate(id, payload, {
     new : true,
@@ -124,7 +199,6 @@ const updateMainProjectsSingleDataIntoDB = async (id : string , payload : Partia
   })
   return result
 }
-
 
 const updateProjectIntoDB = async (id: string, keyName : string , payload: Partial<TProjuct>) => {  
   const update = { [keyName]: payload };
@@ -150,12 +224,16 @@ const deleteProjectsIntoDB = async (payload : any ) => {
   }
 };
 
+
+
+
 export const ProjectsServices = {
+  totalDataCountIntoDB,
   getAllProjects,
   duplicateDataIntoDB,
   deleteProjectsIntoDB,
   getAllFavouriteProjects,
   updateMainProjectsSingleDataIntoDB,
   updateFavouriteProjectIntoDB,
-  updateProjectIntoDB
+  updateProjectIntoDB,
 };
