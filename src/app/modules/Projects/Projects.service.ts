@@ -85,8 +85,6 @@ const totalDataCountIntoDB = async () => {
 };
 
 
-
-
 const getAllProjects = async (query: Record<string, unknown>) => {
   if (query.date) {
     const dateRange = query.date as string;
