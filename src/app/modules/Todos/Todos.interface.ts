@@ -3,5 +3,6 @@ export type TTodos = {
     title2 : Date,
     Priority:string,
     Description : string,
-    UpdatedAt: Date
+    UpdatedAt: Date,
+    checked ?: true
 }

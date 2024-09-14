@@ -14,6 +14,7 @@ const TodoSchema : Schema = new Schema<TTodos>({
     Priority : { type : String, required : [true, "Priority is required"] },
     Description : { type :  String , required : [true, "Description is required"]},
     UpdatedAt : { type : Date , required : [true, "UpdateAt is required"] },
+    checked : {type : Boolean}
 })
 
 export const Todos = model<TTodos>('Todos', TodoSchema);

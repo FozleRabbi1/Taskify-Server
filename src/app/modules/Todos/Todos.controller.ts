@@ -13,8 +13,19 @@ const getAllTodos = catchAsync(async (req, res) => {
     });
   });
 
+const checkedTodos = catchAsync(async (req, res) => {
+    const result = await TodosServices.checkedTodosIntoDB(req?.params?.id);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Todo checked Successfully',
+      data: result,
+    });
+  });
+
 
 
   export const TodosController = {
-    getAllTodos
+    getAllTodos,
+    checkedTodos
   }
