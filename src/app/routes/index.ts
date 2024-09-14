@@ -3,6 +3,7 @@ import {  projectsRouter } from '../modules/Projects/Projects.routes';
 import { UserRouter } from '../modules/User/user.route';
 import { ProductsRouter } from '../modules/products/Products.routes';
 import { TagsRouter } from '../modules/Tags/Tags.routes';
+import { TodosRouter } from '../modules/Todos/Todos.routes';
 const router = express.Router();
 
 const moduleRoutes = [
@@ -10,6 +11,7 @@ const moduleRoutes = [
   { path: '/auth', route: UserRouter },
   { path: '/tags', route: TagsRouter },
   { path: '/products', route: ProductsRouter },
+  { path: '/todos', route: TodosRouter },
 ];
 
 moduleRoutes.forEach((pathRouter) =>
