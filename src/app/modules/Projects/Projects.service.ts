@@ -39,15 +39,15 @@ const getAllProjects = async (query: Record<string, unknown>) => {
     return result.reverse();
   } 
 
-  const studentQuery = new QueryBuilder(
+  const projectsQuery = new QueryBuilder(
     Project.find(), query,
   )
     .search(["title"])
     .filter()
-    .sort()
-    .fields();
+    // .sort()
+    // .fields();
   
-  const result = await studentQuery.modelQuery;
+  const result = await projectsQuery.modelQuery;
   return result.reverse();
 };
 
@@ -63,7 +63,7 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
       throw new Error('Project not found');
     }
     
-    const newProjectData = project.toObject() as Partial<typeof project> & { _id?: mongoose.Types.ObjectId };
+    const newProjectData = project.toObject() as Partial<typeof Project> & { _id?: mongoose.Types.ObjectId };
     delete newProjectData._id;    
 
     const startsAt = new Date();
@@ -97,7 +97,7 @@ const getAllFavouriteProjects = async () => {
 
 const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
   try {
-    const updateData = { ...payload };
+    const updateData = { ...payload };   
 
     if (payload.isFavourite === "favourite") {
       delete updateData.isFavourite;

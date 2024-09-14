@@ -22,7 +22,7 @@ const ProjectSchema: Schema = new Schema<TProjuct>({
   },
   budget: { type: String, required: true },
   tags: { type: [String], required: true },
-  isFavourite:{ type : String, enum : ["notFavourite", "favourite"] },
+  isFavourite:{ type : String, enum : ["true", "favourite"] },
   startsAt: { type: Date, required: true },
   endsAt: { type: Date, required: true }
 },
