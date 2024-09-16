@@ -12,8 +12,20 @@ const getAllNotesFromDB = async (  ) => {
     return result;
   };
 
+const deleteNoteIntoDB = async (id : string ) => {
+    const result = await Note.findByIdAndDelete(id);
+    return result;
+  };
+
+const updateNoteIntoDB = async (id : string, payload : Partial<TNote> ) => {
+    const result = await Note.findByIdAndUpdate(id, payload, {new : true, runValidators : true});
+    return result;
+  };
+
   
   export const NoteServices = {
     createNoteIntoDB,
-    getAllNotesFromDB
+    getAllNotesFromDB,
+    deleteNoteIntoDB,
+    updateNoteIntoDB
   };

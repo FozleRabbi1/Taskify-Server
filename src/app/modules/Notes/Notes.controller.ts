@@ -18,14 +18,35 @@ const getAllNotes = catchAsync(async (req, res) => {
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Note Create Successfully',
+      message: 'Get All Notes Successfully',
       data: result,
     });
   });
 
-  
+const deleteNote = catchAsync(async (req, res) => {
+    
+    const result = await NoteServices.deleteNoteIntoDB(req?.params?.id);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Delete Note Successfully',
+      data: result,
+    });
+  });
+const updateNote = catchAsync(async (req, res) => {    
+    const result = await NoteServices.updateNoteIntoDB(req?.params?.id, req?.body);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Note Update Successfully',
+      data: result,
+    });
+  });
+
   export const NotesControllers = {
     createNots,
-    getAllNotes
+    getAllNotes,
+    deleteNote,
+    updateNote
   };
   
