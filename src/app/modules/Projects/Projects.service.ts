@@ -223,8 +223,6 @@ const deleteProjectsIntoDB = async (payload : any ) => {
 };
 
 
-
-
 export const ProjectsServices = {
   totalDataCountIntoDB,
   getAllProjects,

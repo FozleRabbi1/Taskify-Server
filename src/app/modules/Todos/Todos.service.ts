@@ -2,7 +2,7 @@ import { Todos } from "./Todos.module";
 
 
 const getAllTodosFromDB = async () => {  
-    const result = await Todos.find()
+    const result = await Todos.find().sort({checked : 1})
     return result;
   };
 
@@ -14,7 +14,7 @@ const checkedTodosIntoDB = async (id : string) => {
     const result = await Todos.updateOne({_id : id}, { $set : {checked : true} })
     return result
   }  
-  const result = await Todos.updateOne({_id : id}, { $set : {checked : false} }) 
+  const result = await Todos.updateOne({_id : id}, { $set : {checked : false} })
   
     return result;
   };
@@ -25,6 +25,4 @@ const checkedTodosIntoDB = async (id : string) => {
   export const TodosServices = {
     getAllTodosFromDB,
     checkedTodosIntoDB
-    // updateTagsIntoDB,
-    // deleteTagsInfoDB
   }
