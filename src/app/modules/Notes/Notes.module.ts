@@ -5,9 +5,8 @@ const noteSchema  = new Schema<TNote>({
     title: {
     type: String,
     required: true,
-    trim: true
   },
-  content: {
+  contentData: {
     type: String,
     required: true,
     trim: true
@@ -15,7 +14,10 @@ const noteSchema  = new Schema<TNote>({
   color: {
     type: String,
     required: true,
-    trim: true
+  },
+  finalRotation: {
+    type: Number,
+    required: true,
   },
 }, {timestamps : true});
 

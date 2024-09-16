@@ -1,5 +1,6 @@
 export type TNote = {
     color : string,
-    content : string,
+    contentData : string,
     title : string,
+    finalRotation : number
 }
