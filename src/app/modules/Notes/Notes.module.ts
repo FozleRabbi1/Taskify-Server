@@ -13,7 +13,7 @@ const noteSchema  = new Schema<TNote>({
   },
   color: {
     type: String,
-    required: true,
+    default : "Green"
   },
   finalRotation: {
     type: Number,
