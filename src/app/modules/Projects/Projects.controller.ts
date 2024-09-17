@@ -3,6 +3,16 @@ import { catchAsync } from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { ProjectsServices } from './Projects.service';
 
+const createProject = catchAsync(async (req, res) => {
+  const result = await ProjectsServices.addProjectIntoDB(req?.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Project Create Successfully',
+    data: result,
+  });
+});
+
 const getAllProjects = catchAsync(async (req, res) => {
   const result = await ProjectsServices.getAllProjects(req?.query);
   sendResponse(res, {
@@ -97,6 +107,7 @@ const totalDataCount = catchAsync(async (req, res) => {
 });
 
 export const projectsControllers = {
+  createProject,
   getAllProjects,
   duplicateData,
   getAllFavourite,

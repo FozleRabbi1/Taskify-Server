@@ -49,6 +49,28 @@ interface DateRangeQuery {
 // }
 
 
+const addProjectIntoDB = async (payload : TProjuct) =>{
+  const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
+    const lastDocumentId = lastDocument?.id || 0;
+    const {startsAt, endsAt, ...datas } = payload
+
+    const updateStartsAt = new Date(startsAt).toISOString();
+    const updateEndsAt = new Date(endsAt).toISOString();
+
+    const data = {
+      ...datas,
+      id : lastDocumentId + 1,
+      startsAt : updateStartsAt,
+      endsAt : updateEndsAt
+
+    }
+  const result = await Project.create(data)
+  return result  
+}
+
+
+
+
 const totalDataCountIntoDB = async () => {
   const [onGoing, completed, started, inReview, defaultStatus, checkedTrue, checkedFalse] = await Promise.all([
     Project.find({ status: "On Going" }).countDocuments(),
@@ -224,6 +246,7 @@ const deleteProjectsIntoDB = async (payload : any ) => {
 
 
 export const ProjectsServices = {
+  addProjectIntoDB,
   totalDataCountIntoDB,
   getAllProjects,
   duplicateDataIntoDB,
