@@ -12,43 +12,6 @@ interface DateRangeQuery {
 }
 
 
-// const totalDataCountIntoDB = async() =>{
-//   const OnGoing = await Project.find({ status: "On Going" }).select("status")
-//   const Completed = await Project.find({ status: "Completed" }).select("status")
-//   const Started = await Project.find({ status: "Started" }).select("status")
-//   const InReview = await Project.find({ status: "In Review" }).select("status")
-//   const Default = await Project.find({ status: "Default" }).select("status")
-
-
-//   const checkedDataTrue = await Todos.find({ checked: "true" }).select("checked")
-//   const checkedDataFalse = await Todos.find({ checked: "false" }).select("checked")
-
-
-//   const allProjectsData = {
-//     ongoing : { status : "On Going" , onGoing : OnGoing.length },
-//     Completed : { status : "Completed" , completed : Completed.length },
-//     Started : { status : "Started" , started : Started.length },
-//     InReview : { status : "In Review" , inReview : InReview.length },
-//     Default : { status : "Default" , default : Default.length },
-//   }
-
-//   const allTasksData = {
-//     ongoing : { status : "On Going" , onGoing : OnGoing.length + 2 },
-//     Completed : { status : "Completed" , completed : Completed.length + 2 },
-//     Started : { status : "Started" , started : Started.length + 2 },
-//     InReview : { status : "In Review" , inReview : InReview.length + 2 },
-//     Default : { status : "Default" , default : Default.length + 2 },
-//   }
-
-//   const todoData = {
-//     checked : checkedDataTrue.length,
-//     removeChacked : checkedDataFalse.length
-//   } 
-
-//   return {allProjectsData, allTasksData , todoData}  
-// }
-
-
 const addProjectIntoDB = async (payload : TProjuct) =>{
   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
     const lastDocumentId = lastDocument?.id || 0;
