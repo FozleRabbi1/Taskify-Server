@@ -25,7 +25,6 @@ const checkedTodos = catchAsync(async (req, res) => {
   });
 
 
-
   export const TodosController = {
     getAllTodos,
     checkedTodos
