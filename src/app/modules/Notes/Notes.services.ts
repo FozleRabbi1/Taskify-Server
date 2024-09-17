@@ -9,7 +9,7 @@ const createNoteIntoDB = async ( payload : Partial<TNote> ) => {
 
 const getAllNotesFromDB = async (  ) => {
     const result = await Note.find();
-    return result;
+    return result.reverse();
   };
 
 const deleteNoteIntoDB = async (id : string ) => {

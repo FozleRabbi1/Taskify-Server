@@ -9,7 +9,8 @@ const getAllTodos = catchAsync(async (req, res) => {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Get All Todos Successfully',
-      data: result,
+      data: result.result,
+      meta : result.checkedCount
     });
   });
 
