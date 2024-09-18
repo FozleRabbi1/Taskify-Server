@@ -23,3 +23,24 @@ moduleRoutes.forEach((pathRouter) =>
 );
 
 export default router;
+
+
+
+// {
+//   "version": 2,
+//   "builds": [
+//     {
+//       "src": "dist/server.js",
+//       "use": "@vercel/node"
+//     }
+//   ],
+//   "routes": [
+//     {
+//       "src": "/(.*)",
+//       "dest": "dist/server.js",
+//       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+//     }
+//   ]
+// }
+
+
