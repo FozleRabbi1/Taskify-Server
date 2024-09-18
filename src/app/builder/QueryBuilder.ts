@@ -26,7 +26,7 @@ class QueryBuilder<T> {
   }
 
   filter() {
-    const queryObj = { ...this.query }; // copy query
+    const queryObj = { ...this.query }; 
     const excluedeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields', "title"];
     excluedeFields.forEach((el) => delete queryObj[el]); // exat match করবে একমন filed রাখা হয়েছে(email)
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);

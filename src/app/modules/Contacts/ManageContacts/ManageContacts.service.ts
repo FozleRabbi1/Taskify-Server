@@ -1,3 +1,4 @@
+import QueryBuilder from "../../../builder/QueryBuilder";
 import { TManageContacts } from "./ManageContacts.interface";
 import { ManageContact } from "./ManageContacts.module";
 
@@ -12,8 +13,17 @@ const addContactInfoIntoDB = async (payload : TManageContacts) =>{
     return result  
   }
 
-  const getAllContactDataFromDB = async () =>{
-    const result = await ManageContact.find()
+  const getAllContactDataFromDB = async (query: Record<string, unknown>) =>{
+    const contactQuery = new QueryBuilder(
+      ManageContact.find(), query,
+    )
+      .search(["title"])
+      .filter()
+      // .sort()
+      // .fields();
+    
+    const result = await contactQuery.modelQuery;
+
     return result.reverse()
   }
 

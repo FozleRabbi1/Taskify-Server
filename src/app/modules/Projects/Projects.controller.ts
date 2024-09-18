@@ -13,7 +13,7 @@ const createProject = catchAsync(async (req, res) => {
   });
 });
 
-const getAllProjects = catchAsync(async (req, res) => {
+const getAllProjects = catchAsync(async (req, res) => {  
   const result = await ProjectsServices.getAllProjects(req?.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
