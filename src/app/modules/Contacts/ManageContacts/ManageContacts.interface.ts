@@ -4,9 +4,9 @@ export type TManageContacts = {
     client: string;
     project: string;
     type: string;
-    startsAt:Date;
+    startAt:Date;
     endsAt:Date;
-    value: number;
+    budget: number;
     status: string;
     createdBy: string;
   }

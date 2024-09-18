@@ -26,7 +26,7 @@ const ManageContactSchema: Schema = new Schema<TManageContacts>({
         required: true,
         trim: true
       },
-      startsAt: {
+      startAt: {
         type: Date,
         required: true
       },
@@ -34,7 +34,7 @@ const ManageContactSchema: Schema = new Schema<TManageContacts>({
         type: Date,
         required: true
       },
-      value: {
+      budget: {
         type: Number,
         required: true
       },
@@ -48,7 +48,8 @@ const ManageContactSchema: Schema = new Schema<TManageContacts>({
         trim: true
       }
     }, {
-      timestamps: true
+      timestamps: true,
+      versionKey: false
     });
 
 export const ManageContact = model<TManageContacts>('manageContact', ManageContactSchema);

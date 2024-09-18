@@ -13,6 +13,17 @@ const createContact = catchAsync(async (req, res) => {
     });
   });
 
+const getAllContact = catchAsync(async (req, res) => {
+    const result = await contactsService.getAllContactDataFromDB();
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Get All Contact Successfully',
+      data: result,
+    });
+  });
+
   export const contactsController = {
-    createContact
+    createContact,
+    getAllContact
   }

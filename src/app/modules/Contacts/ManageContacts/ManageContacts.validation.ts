@@ -8,7 +8,7 @@ const manageContactsSchema = z.object({
     type: z.string().min(1, "Type is required").trim(),
     startsAt: z.date({ required_error: "Start date is required" }),
     endsAt: z.date({ required_error: "End date is required" }),
-    value: z.number().positive("Value must be a positive number"),
+    budget: z.number().positive("Value must be a positive number"),
     status: z.string().min(1, "Status is required").trim(),
     createdBy: z.string().min(1, "Created by is required").trim()
   });
