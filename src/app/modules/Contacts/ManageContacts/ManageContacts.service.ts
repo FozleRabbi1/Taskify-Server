@@ -19,8 +19,6 @@ const addContactInfoIntoDB = async (payload : TManageContacts) =>{
     )
       .search(["title"])
       .filter()
-      // .sort()
-      // .fields();
     
     const result = await contactQuery.modelQuery;
 
