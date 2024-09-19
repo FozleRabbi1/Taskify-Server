@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { TTodos } from "./Todos.interface";
 import { Todos } from "./Todos.module";
 
@@ -25,13 +26,27 @@ const checkedTodosIntoDB = async (id : string) => {
   }
 
   const deleteTodoFromDB = async (payload : string[]) => {
+    // try {
+    //     const result = await Todos.deleteMany({ _id: { $in: payload } });
+    //     return result;
+    // } catch (error) {
+    //     console.error("Error deleting todos:", error);
+    //     throw error;
+    // }
     try {
-        const result = await Todos.deleteMany({ _id: { $in: payload } });
-        return result;
+      if (!Array.isArray(payload) || !payload.every(id => typeof id === 'string')) {
+        throw new Error('Invalid payload format');
+      }
+      const objectIds = payload.map(id => new mongoose.Types.ObjectId(id));
+      
+  
+      const result = await Todos.deleteMany({ _id: { $in: objectIds } });
+      return result;
     } catch (error) {
-        console.error("Error deleting todos:", error);
-        throw error;
+      console.error('Error deleting projects:', error);
+      throw error;
     }
+
 };
 
 

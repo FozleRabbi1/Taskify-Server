@@ -9,11 +9,11 @@ import { ContactsRouter } from '../modules/Contacts/ManageContacts/ManageContact
 const router = express.Router();
 
 const moduleRoutes = [
+  { path: '/todos', route: TodosRouter },
   { path: '/projects', route: projectsRouter },
   { path: '/auth', route: UserRouter },
   { path: '/tags', route: TagsRouter },
   { path: '/products', route: ProductsRouter },
-  { path: '/todos', route: TodosRouter },
   { path: '/notes', route: NotesRouter },
   { path: '/contacts', route: ContactsRouter },
 ];
