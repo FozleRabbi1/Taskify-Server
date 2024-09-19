@@ -14,8 +14,7 @@ const checkedTodosIntoDB = async (id : string) => {
   if(!isChecked?.checked){
     const result = await Todos.updateOne({_id : id}, { $set : {checked : true} })
     return result
-  }  
-
+  }
   const result = await Todos.updateOne({_id : id}, { $set : {checked : false} })
     return result;
   };
