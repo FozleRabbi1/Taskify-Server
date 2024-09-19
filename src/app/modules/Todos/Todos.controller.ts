@@ -24,8 +24,31 @@ const checkedTodos = catchAsync(async (req, res) => {
     });
   });
 
+const updateTodos = catchAsync(async (req, res) => {
+    const result = await TodosServices.updateTodosIntoDB(req?.params?.id, req?.body);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Todo Update Successfully',
+      data: result,
+    });
+  });
+
+const deleteTodos = catchAsync(async (req, res) => {
+  const deleteIdArray = req?.body?.idArray;  
+    const result = await TodosServices.deleteTodoFromDB(deleteIdArray);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Todo Delete Successfully',
+      data: result,
+    });
+  });
+
 
   export const TodosController = {
     getAllTodos,
-    checkedTodos
+    checkedTodos,
+    updateTodos,
+    deleteTodos
   }

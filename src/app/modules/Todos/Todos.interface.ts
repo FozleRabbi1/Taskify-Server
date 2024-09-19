@@ -1,4 +1,5 @@
 export type TTodos = {
+    id : number,
     title : string,
     title2 : Date,
     Priority:string,

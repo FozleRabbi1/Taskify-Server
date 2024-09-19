@@ -1,3 +1,4 @@
+import { TTodos } from "./Todos.interface";
 import { Todos } from "./Todos.module";
 
 
@@ -18,8 +19,26 @@ const checkedTodosIntoDB = async (id : string) => {
     return result;
   };
 
+  const updateTodosIntoDB = async (id: string, payload : Partial<TTodos>)=>{
+    const result = await Todos.findByIdAndUpdate(id, payload , {new : true, runValidators : true})
+    return result    
+  }
+
+  const deleteTodoFromDB = async (payload : string[]) => {
+    try {
+        const result = await Todos.deleteMany({ _id: { $in: payload } });
+        return result;
+    } catch (error) {
+        console.error("Error deleting todos:", error);
+        throw error;
+    }
+};
+
+
 
   export const TodosServices = {
     getAllTodosFromDB,
-    checkedTodosIntoDB
+    checkedTodosIntoDB,
+    updateTodosIntoDB,
+    deleteTodoFromDB
   }

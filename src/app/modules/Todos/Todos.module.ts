@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 import { TTodos } from "./Todos.interface";
 
 const TodoSchema : Schema = new Schema<TTodos>({
+    id : {type : Number, required : [true, "Id is required"]},
     
     title : {
         type : String,

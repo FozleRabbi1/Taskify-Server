@@ -86,7 +86,7 @@ const updatesProjectsInfo = catchAsync(async (req, res) => {
 });
 
 const deleteProjects = catchAsync(async (req, res) => {
-  const deleteIdArray = req.body.idArray;
+  const deleteIdArray = req?.body?.idArray;
   const result = await ProjectsServices.deleteProjectsIntoDB(deleteIdArray );
   sendResponse(res, {
     statusCode: httpStatus.OK,
