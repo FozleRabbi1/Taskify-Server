@@ -23,7 +23,6 @@ const getAllProjects = catchAsync(async (req, res) => {
   });
 });
 
-
 const duplicateData = catchAsync(async (req, res) => {
   const id = req.params.id
   const title = req.body.title
@@ -35,7 +34,6 @@ const duplicateData = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
 
 const getAllFavourite = catchAsync(async (req, res) => {
   const result = await ProjectsServices.getAllFavouriteProjects();

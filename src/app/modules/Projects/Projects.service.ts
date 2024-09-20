@@ -113,7 +113,6 @@ const getAllProjects = async (query: Record<string, unknown>) => {
 
 
 const duplicateDataIntoDB = async (mainId: string, title: string) => {
-
   try {
     const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
     const lastDocumentId = lastDocument?.id || 0;
