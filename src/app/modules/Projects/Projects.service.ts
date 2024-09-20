@@ -104,8 +104,6 @@ const getAllProjects = async (query: Record<string, unknown>) => {
   )
     .search(["title"])
     .filter()
-    // .sort()
-    // .fields();
   
   const result = await projectsQuery.modelQuery;
   return result.reverse();

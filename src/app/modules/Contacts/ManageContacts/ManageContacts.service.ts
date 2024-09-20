@@ -14,21 +14,6 @@ const addContactInfoIntoDB = async (payload : TManageContacts) =>{
     return result  
   }
 
-  
-  // const getAllContactDataFromDB = async (query: Record<string, unknown>) =>{
-
-  //   console.log(query);
-    
-  //   const contactQuery = new QueryBuilder(
-  //     ManageContact.find(), query,
-  //   )
-  //     .search(["title"])
-  //     .filter()    
-  //   const result = await contactQuery.modelQuery;
-  //   return result.reverse()
-  // }
-
-
   const getAllContactDataFromDB = async (query: Record<string, unknown>) => {
     if (query?.date && query?.fieldName) {
       const [startDate, endDate] = (query.date as string).split(',').map(date => new Date(date));
