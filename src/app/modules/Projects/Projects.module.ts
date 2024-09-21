@@ -8,8 +8,10 @@ const ProjectSchema: Schema = new Schema<TProjuct>({
     unique: true,
   },
     title: { type: String, required: true },
-  users: { type: [String], required: true },
-  clients: { type: [String], required: true },
+    usersId: { type: [String] },
+    users: { type: [String] },
+    clientsId: { type: [String] },
+    clients: { type: [String] },
   status: { 
     type: String, 
     enum: ["On Going", "Started", "Default", "In Review", "Completed"], 

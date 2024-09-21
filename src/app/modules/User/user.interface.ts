@@ -12,7 +12,7 @@ export interface TUser {
   email: string;
   password: string;
   name: TUserName;
-  role: 'user' | 'admin';
+  role: 'user' | 'Admin' | "client";
   image:string
 }
 

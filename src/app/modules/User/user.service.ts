@@ -17,9 +17,12 @@ const createUserIntoDB = async (payload: TUser) => {
 
 
 const getAllUserFromDB = async () => {
-  const result = await User.find(); 
-  return result;
+  const user = await User.find({ role: { $in: ["Admin", "user"] } });
+  const client = await User.find({role : "client"})
+  return {user, client};
 };
+
+
 const findSingleUserIntoDB = async (email : string) => {
   const result = await User.findOne({ email }); 
   return result;

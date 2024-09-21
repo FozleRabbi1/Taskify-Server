@@ -43,8 +43,6 @@ const addContactInfoIntoDB = async (payload : TManageContacts) =>{
     }
   };
 
-
-
   const updateContactIntoDB = async (id: string,  payload: Partial<TManageContacts>) => {    
     const result = await ManageContact.findByIdAndUpdate(id, payload, {
       new: true, 

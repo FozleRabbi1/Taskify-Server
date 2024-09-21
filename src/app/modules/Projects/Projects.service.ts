@@ -5,31 +5,59 @@ import { Project } from "./Projects.module";
 import { TProjuct } from "./Projects.interface";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { Todos } from "../Todos/Todos.module";
-
-interface DateRangeQuery {
-  firstDate?: Date;
-  secondDate?: Date;
-}
+import { User } from "../User/user.model";
 
 
-const addProjectIntoDB = async (payload : TProjuct) =>{
+// const addProjectIntoDB = async (payload : TProjuct) =>{
+//   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
+//     const lastDocumentId = lastDocument?.id || 0;
+//     const {startsAt, endsAt, ...datas } = payload
+//     const updateStartsAt = new Date(startsAt).toISOString();
+//     const updateEndsAt = new Date(endsAt).toISOString();
+//     const userCollection = await User.find()
+//     const data = {
+//       ...datas,
+//       id : lastDocumentId + 1,
+//       startsAt : updateStartsAt,
+//       endsAt : updateEndsAt
+//     }
+//   // const result = await Project.create(data)
+//   console.log(data);
+//   return null  
+// }
+
+
+const addProjectIntoDB = async (payload: TProjuct) => {
   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
-    const lastDocumentId = lastDocument?.id || 0;
-    const {startsAt, endsAt, ...datas } = payload
+  const lastDocumentId = lastDocument?.id || 0;
+  const { startsAt, endsAt, usersId, clientsId, ...datas } = payload;
 
-    const updateStartsAt = new Date(startsAt).toISOString();
-    const updateEndsAt = new Date(endsAt).toISOString();
+  const updateStartsAt = new Date(startsAt).toISOString();
+  const updateEndsAt = new Date(endsAt).toISOString();
+  const usersData = await User.find({ _id: { $in: usersId } }).select('image');
+  const usersImages = usersData.map(user => user.image);
+  const clientsData = await User.find({ _id: { $in: clientsId } }).select('image');
+  const clientsImages = clientsData.map(client => client.image);
 
-    const data = {
-      ...datas,
-      id : lastDocumentId + 1,
-      startsAt : updateStartsAt,
-      endsAt : updateEndsAt
+  const data = {
+    id: lastDocumentId + 1,
+    title: datas.title,
+    budget: datas.budget,
+    priority: datas.priority,
+    status: datas.status,
+    tags: datas.tags,
+    users: usersImages,
+    usersId,
+    clientsId,
+    clients: clientsImages,
+    startsAt: updateStartsAt,
+    endsAt: updateEndsAt
+  };
 
-    }
-  const result = await Project.create(data)
-  return result  
-}
+  const result = await Project.create(data);
+  return result; 
+};
+
 
 
 
@@ -69,41 +97,35 @@ const totalDataCountIntoDB = async () => {
   return { projectData, todoData, allTasksData };
 };
 
-
 const getAllProjects = async (query: Record<string, unknown>) => {
-  if (query.date) {
-    const dateRange = query.date as string;
-    const [startDateString, endDateString] = dateRange.split(',');
+  if (query?.date && query?.fieldName) {
+    const [startDateString, endDateString] = (query.date as string).split(',');
+
     const startDate = new Date(startDateString);
     const endDate = new Date(endDateString);
-
-    query.dateInfo = {
-      firstDate: startDate,
-      secondDate: endDate,
-    } as DateRangeQuery;    
-    delete query.date;
-  }
-
-  if (query.dateInfo) {
-    const { firstDate, secondDate } = query.dateInfo as DateRangeQuery;
-    const result = await Project.aggregate([
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
+    const fieldName = query.fieldName as string;
+    const pipeline = [
       {
         $match: {
-          [query.fieldName as string]: {
-            $gte: firstDate,
-            $lte: secondDate,
+          [fieldName]: {
+            $gte: startDate, 
+            $lte: endDate, 
           },
         },
       },
-    ]);  
+    ];
+
+    const result = await Project.aggregate(pipeline).exec();
     return result.reverse();
-  } 
+  }
 
   const projectsQuery = new QueryBuilder(
     Project.find(), query,
   )
     .search(["title"])
-    .filter()
+    .filter();
   
   const result = await projectsQuery.modelQuery;
   return result.reverse();

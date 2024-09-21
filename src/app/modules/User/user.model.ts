@@ -35,7 +35,8 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     role: {
       type: String,
-      default: 'user',
+      required: [true, 'role is required'],    
+      enum: ["user" , "Admin" , "client"],
     },
     image : {
       type : String,
