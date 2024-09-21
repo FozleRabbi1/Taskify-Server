@@ -58,10 +58,6 @@ const addProjectIntoDB = async (payload: TProjuct) => {
   return result; 
 };
 
-
-
-
-
 const totalDataCountIntoDB = async () => {
   const [onGoing, completed, started, inReview, defaultStatus, checkedTrue, checkedFalse] = await Promise.all([
     Project.find({ status: "On Going" }).countDocuments(),
@@ -131,7 +127,6 @@ const getAllProjects = async (query: Record<string, unknown>) => {
   return result.reverse();
 };
 
-
 const duplicateDataIntoDB = async (mainId: string, title: string) => {
   try {
     const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
@@ -171,7 +166,6 @@ const getAllFavouriteProjects = async () => {
   const result = await Project.find({isFavourite : "true"});
   return result;
 };
-
 
 const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
   try {
