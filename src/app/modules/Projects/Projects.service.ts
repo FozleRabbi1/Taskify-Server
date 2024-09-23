@@ -173,7 +173,7 @@ const addProjectIntoDB = async (payload: TProjuct) => {
   try {
     session.startTransaction();
     const result = await Project.create([data], { session });
-    
+
     const assignedProjectCounts = await Promise.all(
       usersId.map(async (userId) => {
         const count = await Project.countDocuments({
@@ -343,6 +343,64 @@ const updateMainProjectsSingleDataIntoDB = async (id : string , payload : Partia
   })
   return result
 }
+
+// ============>>>>> updateMainProjectsSingleDataIntoDB ei update function ta niye pore kaj korte hobe 
+// const updateMainProjectsSingleDataIntoDB = async (id: string, payload: Partial<TProjuct>) => {
+//   const userIds = payload.users;
+
+//   const session = await mongoose.startSession();
+//   try {
+//     session.startTransaction();
+//     if (payload.users && Array.isArray(payload.users)) {
+//       const usersData = await User.find({ _id: { $in: payload.users } }).select('image');
+//       const usersImages = usersData.map(user => user.image);
+
+//       payload.users = usersImages;
+//     }
+
+//     const result = await Project.findByIdAndUpdate(id, payload, {
+//       new: true,
+//       runValidators: true,
+//       session, 
+//     });
+
+//     if (userIds && Array.isArray(userIds)) {
+//       const assignedProjectCounts = await Promise.all(
+//         userIds.map(async (userId) => {
+//           const count = await Project.aggregate([
+//             { $match: { usersId: { $in: [userId] } } },
+//             { $count: "count" }
+//           ]).session(session); 
+          
+//           const assignedProjectCount = count[0]?.count || 0;
+//           return { userId, assignedProjectCount };
+//         })
+//       );
+
+//       await Promise.all(
+//         assignedProjectCounts.map(async (item) => {
+//           await User.findByIdAndUpdate(
+//             item.userId,
+//             { projects: item.assignedProjectCount },
+//             { new: true, runValidators: true, session } 
+//           );
+//         })
+//       );
+//     }
+
+//     await session.commitTransaction();
+//     return result;
+//   } catch (err: any) {
+//     await session.abortTransaction();
+//     throw new Error(err);
+//   } finally {
+//     await session.endSession();
+//   }
+// };
+
+
+
+
 
 const updateProjectIntoDB = async (id: string, keyName : string , payload: Partial<TProjuct>) => {  
   const update = { [keyName]: payload };
