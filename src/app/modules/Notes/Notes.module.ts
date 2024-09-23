@@ -19,7 +19,7 @@ const noteSchema  = new Schema<TNote>({
     type: Number,
     required: true,
   },
-}, {timestamps : true});
+}, {timestamps : true, versionKey: false});
 
 export const Note = model<TNote>('note', noteSchema);
 

@@ -15,10 +15,11 @@ const studentNameSchema = new Schema<TUserName>({
     trim: true,
     required: [true, 'Last name is required'],
   },
-});
+}, {versionKey: false});
 
 const userSchema = new Schema<TUser, UserModel>(
   {
+    Id : { type : Number, required : [true, "Id is required"] },
     name: {
       type: studentNameSchema,
       required: [true, 'Name is required'],
@@ -41,10 +42,19 @@ const userSchema = new Schema<TUser, UserModel>(
     image : {
       type : String,
       require : [true, "Image is required"]
-    }
+    },
+    projects : {
+      type : Number,
+      default : 0
+    },
+    tasks : {
+      type : Number,
+      default : 0
+    },
   },
   {
     timestamps: true,
+    versionKey: false
   },
 );
 

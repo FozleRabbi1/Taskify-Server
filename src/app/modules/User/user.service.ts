@@ -7,13 +7,27 @@ import { createToken, verifyToken } from './user.utils';
 import config from '../../config';
 
 const createUserIntoDB = async (payload: TUser) => {
+
   const isStudentExists = await User.findOne({ email: payload.email });
   if (isStudentExists) {
     throw new AppError(httpStatus.BAD_REQUEST, 'User already exists');
   }
-  const result = await User.create(payload);
+
+  const lastDocument = await User.findOne().sort({ _id: -1 }).exec();
+  const lastDocumentId = lastDocument?.Id || 0;
+
+  const newUserData = {
+    Id: lastDocumentId + 1,
+    email : payload.email,
+    password : payload.password,
+    name : payload.name,
+    role : payload.role,
+    image : payload.image
+  };
+  const result = await User.create(newUserData);
   return result;
 };
+
 
 
 const getAllUserFromDB = async () => {

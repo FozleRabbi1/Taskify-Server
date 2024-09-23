@@ -27,17 +27,132 @@ import { User } from "../User/user.model";
 // }
 
 
+
+// ===============================================================================================================================
+// const addProjectIntoDB = async (payload: TProjuct) => {
+
+//   // const userId  = await User.find().select("_id")
+//   // console.log(userId);
+  
+
+//   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
+//   const lastDocumentId = lastDocument?.id || 0;
+//   const { startsAt, endsAt, usersId, clientsId, ...datas } = payload;
+
+  
+//   const usersData = await User.find({ _id: { $in: usersId } }).select('image');
+//   const usersImages = usersData.map(user => user.image);
+//   const clientsData = await User.find({ _id: { $in: clientsId } }).select('image');
+//   const clientsImages = clientsData.map(client => client.image);
+
+
+
+//   const updateStartsAt = new Date(startsAt).toISOString();
+//   const updateEndsAt = new Date(endsAt).toISOString();
+
+//   const data = {
+//     id: lastDocumentId + 1,
+//     title: datas.title,
+//     budget: datas.budget,
+//     priority: datas.priority,
+//     status: datas.status,
+//     tags: datas.tags,
+//     users: usersImages,
+//     usersId,
+//     clientsId,
+//     clients: clientsImages,
+//     startsAt: updateStartsAt,
+//     endsAt: updateEndsAt
+//   };
+
+//   const result = await Project.create(data);
+//   return result; 
+// };
+
+// ===================================================================================================================
+
+// const addProjectIntoDB = async (payload: TProjuct) => {
+//   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
+//   const lastDocumentId = lastDocument?.id || 0;
+//   const { startsAt, endsAt, usersId, clientsId, ...datas } = payload;
+//   const usersData = await User.find({ _id: { $in: usersId } }).select('image');
+//   const usersImages = usersData.map(user => user.image);
+//   const clientsData = await User.find({ _id: { $in: clientsId } }).select('image');
+//   const clientsImages = clientsData.map(client => client.image);  
+
+//   if (!usersId || usersId.length === 0) {
+//     throw new Error('No usersId provided or the usersId array is empty');
+//   }
+
+//   const updateStartsAt = new Date(startsAt).toISOString();
+//   const updateEndsAt = new Date(endsAt).toISOString();
+
+//   const data = {
+//     id: lastDocumentId + 1,
+//     title: datas.title,
+//     budget: datas.budget,
+//     priority: datas.priority,
+//     status: datas.status,
+//     tags: datas.tags,
+//     users: usersImages,
+//     usersId,
+//     clientsId,
+//     clients: clientsImages,
+//     startsAt: updateStartsAt,
+//     endsAt: updateEndsAt,
+//   };
+
+//   const session = await mongoose.startSession();
+//   try{
+//     session.startTransaction()
+//     const result = await Project.create([data], {session});
+//   const assignedProjectCounts = await Promise.all(
+//     usersId.map(async (userId) => {
+//       const count = await Project.countDocuments({
+//         usersId: { $in: [userId] },
+//       }).session(session);
+//       return { userId, assignedProjectCount: count };
+//     })
+//   );
+//    await Promise.all(
+//     assignedProjectCounts.map(async (item)=> {
+//       const result = await User.findByIdAndUpdate(item.userId, {projects : item.assignedProjectCount } , {new : true, runValidators : true, session } )
+//       return result
+//     } )
+//   )
+//   await session.commitTransaction();
+//   await session.endSession(); 
+//   return result;
+//   }
+//   catch(err : any){
+//     await session.abortTransaction(); 
+//     await session.endSession(); 
+//     throw new Error(err);
+//   }
+  
+// };
+
+
+
 const addProjectIntoDB = async (payload: TProjuct) => {
   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
   const lastDocumentId = lastDocument?.id || 0;
+
   const { startsAt, endsAt, usersId, clientsId, ...datas } = payload;
+
+  // Validate usersId
+  if (!usersId || usersId.length === 0) {
+    throw new Error('No usersId provided or the usersId array is empty');
+  }
+
+  const usersData = await User.find({ _id: { $in: usersId } }).select('image');
+  const usersImages = usersData.map(user => user.image);
+  
+  const clientsData = await User.find({ _id: { $in: clientsId } }).select('image');
+  const clientsImages = clientsData.map(client => client.image);  
 
   const updateStartsAt = new Date(startsAt).toISOString();
   const updateEndsAt = new Date(endsAt).toISOString();
-  const usersData = await User.find({ _id: { $in: usersId } }).select('image');
-  const usersImages = usersData.map(user => user.image);
-  const clientsData = await User.find({ _id: { $in: clientsId } }).select('image');
-  const clientsImages = clientsData.map(client => client.image);
 
   const data = {
     id: lastDocumentId + 1,
@@ -51,12 +166,45 @@ const addProjectIntoDB = async (payload: TProjuct) => {
     clientsId,
     clients: clientsImages,
     startsAt: updateStartsAt,
-    endsAt: updateEndsAt
+    endsAt: updateEndsAt,
   };
 
-  const result = await Project.create(data);
-  return result; 
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const result = await Project.create([data], { session });
+    
+    const assignedProjectCounts = await Promise.all(
+      usersId.map(async (userId) => {
+        const count = await Project.countDocuments({
+          usersId: { $in: [userId] },
+        }).session(session);
+        return { userId, assignedProjectCount: count };
+      })
+    );
+    await Promise.all(
+      assignedProjectCounts.map(async (item) => {
+        await User.findByIdAndUpdate(
+          item.userId,
+          { projects: item.assignedProjectCount },
+          { new: true, runValidators: true, session }
+        );
+      })
+    );
+    await session.commitTransaction();
+    return result;
+  } catch (err: any) {
+    await session.abortTransaction();
+    throw new Error(err);
+  } finally {
+    await session.endSession();
+  }
 };
+
+
+
+
+
 
 const totalDataCountIntoDB = async () => {
   const [onGoing, completed, started, inReview, defaultStatus, checkedTrue, checkedFalse] = await Promise.all([

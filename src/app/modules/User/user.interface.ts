@@ -9,11 +9,14 @@ export type TUserName = {
 
 export interface TUser {
   id: string;
+  Id : number;
   email: string;
   password: string;
   name: TUserName;
   role: 'user' | 'Admin' | "client" | "member" | "product manager" | 'developer';
-  image:string
+  image:string;
+  projects ?: number;
+  tasks ?: number
 }
 
 // ======================================>>>>>>>> Login Interface

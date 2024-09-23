@@ -12,6 +12,7 @@ const userCreateValidationNameSchema = z.object({
 const createUserValidationSchema = z.object({
   body: z.object({
     user: z.object({
+      // Id : z.number({message : "Id is required"}),
       password: z
         .string()
         .min(5, { message: 'password can not be less then 5 characters' })
@@ -22,7 +23,7 @@ const createUserValidationSchema = z.object({
         .string()
         .email('Invalid email address')
         .min(1, 'Email is required'),
-      role: z.string().optional().default('user'),
+      role: z.string(),
       image : z.string(),
     }),
   }),
