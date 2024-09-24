@@ -14,9 +14,10 @@ export interface TUser {
   password: string;
   name: TUserName;
   role: 'user' | 'Admin' | "client" | "member" | "product manager" | 'developer';
-  image:string;
+  image?:string;
   projects ?: number;
-  tasks ?: number
+  tasks ?: number;
+  number ?: string
 }
 
 // ======================================>>>>>>>> Login Interface

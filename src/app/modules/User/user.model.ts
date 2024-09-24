@@ -8,7 +8,7 @@ const studentNameSchema = new Schema<TUserName>({
     type: String,
     required: [true, 'First name is required'],
     trim: true,
-    maxlength: [10, 'name can not be more then 10 character'],
+    maxlength: [20, 'name can not be more then 20 character'],
   },
   lastName: {
     type: String,
@@ -41,7 +41,6 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     image : {
       type : String,
-      require : [true, "Image is required"]
     },
     projects : {
       type : Number,
@@ -51,6 +50,9 @@ const userSchema = new Schema<TUser, UserModel>(
       type : Number,
       default : 0
     },
+    number : {
+      type : String
+    }
   },
   {
     timestamps: true,

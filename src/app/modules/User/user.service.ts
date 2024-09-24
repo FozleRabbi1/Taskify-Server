@@ -22,8 +22,10 @@ const createUserIntoDB = async (payload: TUser) => {
     password : payload.password,
     name : payload.name,
     role : payload.role,
-    image : payload.image
+    image : payload.image,
+    number : payload.number
   };
+
   const result = await User.create(newUserData);
   return result;
 };
