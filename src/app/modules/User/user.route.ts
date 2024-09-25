@@ -33,4 +33,6 @@ router.post(
   userController.refreshToken,
 );
 
+router.delete('/', userController.deleteUser);
+
 export const UserRouter = router;

@@ -17,7 +17,7 @@ export interface TUser {
   image?:string;
   projects ?: number;
   tasks ?: number;
-  number ?: string
+  number ?: string;
 }
 
 // ======================================>>>>>>>> Login Interface

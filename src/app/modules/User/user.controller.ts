@@ -64,10 +64,24 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
+
+const deleteUser = catchAsync(async (req, res) => {
+  const deleteIdArray = req?.body?.idArray;
+  const result = await UserServices.deleteUserIntoDB(deleteIdArray );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'delete User Successfully',
+    data: result,
+  });
+});
+
+
 export const userController = {
   getSingleUser,
   getAllUser,
   createUser,
   loginUser,
   refreshToken,
+  deleteUser
 };
