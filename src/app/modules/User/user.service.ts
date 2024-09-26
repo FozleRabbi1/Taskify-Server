@@ -127,40 +127,6 @@ const refreshToken = async (token: string) => {
 // };
 
 
-// ================================================================ delete userId 
-// const deleteUserIntoDB = async (payload: any) => {
-//   try {
-//     if (!Array.isArray(payload) || !payload.every(id => typeof id === 'string')) {
-//       throw new Error('Invalid payload format');
-//     }
-
-//     const objectIds = payload.map(id => new mongoose.Types.ObjectId(id));
-//     console.log({ objectIds });
-
-//     const matchingProjects = await Project.find({ usersId: { $in: objectIds } });
-//     console.log({ matchingProjects });
-
-//     for (const project of matchingProjects) {
-//       const updatedUsersId = project.usersId.filter(userId => {
-//         return !objectIds.map(objId => objId.toString()).includes(userId.toString());
-//       });
-
-//       await Project.updateOne(
-//         { _id: project._id },
-//         { $set: { usersId: updatedUsersId } }
-//       );
-//     }
-
-//     // Optionally, delete the users from the User collection
-//     // const result = await User.deleteMany({ _id: { $in: objectIds } });
-
-//     return { message: 'Projects updated successfully.' };
-//   } catch (error) {
-//     console.error('Error updating projects:', error);
-//     throw error;
-//   }
-// };
-
 
 // const deleteUserIntoDB = async (payload: any) => {
 //   try {
