@@ -192,12 +192,10 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
   }
 };
 
-
 const getAllFavouriteProjects = async () => {  
   const result = await Project.find({isFavourite : "true"});
   return result;
 };
-
 
 const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
   try {
@@ -219,6 +217,45 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
     console.error("Error updating project:", error);
   }
 };
+
+
+// =========================================================================== Loading related work for favourite 
+// const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuct>) => {
+//   try {
+//     const updateData = { ...payload };   
+
+//     if (payload.isFavourite === "favourite") {
+//       // Unsetting isFavourite field
+//       delete updateData.isFavourite;
+//       await Project.updateOne(
+//         { _id: id },
+//         { $unset: { isFavourite: "" } }
+//       );
+//     } else {
+//       // Setting isFavourite to true
+//       await Project.updateOne(
+//         { _id: id },
+//         { $set: { isFavourite: true } }
+//       );
+//     }
+
+//     // Call getAllFavouriteProjects after the update
+//     const favouriteProjects = await getAllFavouriteProjects();
+
+//     // Optionally, you can return the updated favourites to the frontend
+//     return favouriteProjects;
+
+//   } catch (error) {
+//     console.error("Error updating project:", error);
+//   }
+// };
+// // Function to get all favourite projects
+// const getAllFavouriteProjects = async () => {   
+//   const result = await Project.find({ isFavourite: true });
+//   return result;
+// };
+
+
 
 
 const updateMainProjectsSingleDataIntoDB = async (id: string, payload: Partial<TProjuct>) => {
