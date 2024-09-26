@@ -162,28 +162,88 @@ const refreshToken = async (token: string) => {
 // };
 
 
+// const deleteUserIntoDB = async (payload: any) => {
+//   try {
+//     if (!Array.isArray(payload) || !payload.every(id => typeof id === 'string')) {
+//       throw new Error('Invalid payload format');
+//     }
+//     const objectIds = payload.map(id => new mongoose.Types.ObjectId(id));
+//     const matchingProjects = await Project.find({ usersId: { $in: objectIds } });
+//     const matchedUsers = await User.find({ _id: { $in: objectIds } }, { image: 1 });
+//     const userImages = matchedUsers.map(user => user.image);
+//     for (const project of matchingProjects) {
+//       const updatedUsersId = project.usersId.filter(userId => {
+//         return !objectIds.map(objId => objId.toString()).includes(userId.toString());
+//       });
+//       const updatedUsers = project.users.filter(userImage => {
+//         return !userImages.includes(userImage);
+//       });
+//       await Project.updateOne(
+//         { _id: project._id },
+//         {
+//           $set: {
+//             usersId: updatedUsersId, 
+//             users: updatedUsers 
+//           }
+//         }
+//       );
+//     }
+
+//     const assignedProjectCounts = await Promise.all(
+//       objectIds.map(async (userId) => {
+//         const count = await Project.countDocuments({
+//           usersId: { $in: [userId] },
+//         });
+//         return { userId, assignedProjectCount: count };
+//       })
+//     );
+//     await Promise.all(
+//       assignedProjectCounts.map(async (item) => {
+//         await User.findByIdAndUpdate(
+//           item.userId,
+//           { projects: item.assignedProjectCount },
+//           { new: true, runValidators: true }
+//         );
+//       })
+//     );
+    
+//     const result = await User.deleteMany({ _id: { $in: objectIds } });
+//     return result;
+//   } catch (error) {
+//     console.error('Error updating projects:', error);
+//     throw error;
+//   }
+// };
+
+
 const deleteUserIntoDB = async (payload: any) => {
   try {
     if (!Array.isArray(payload) || !payload.every(id => typeof id === 'string')) {
       throw new Error('Invalid payload format');
     }
+
     const objectIds = payload.map(id => new mongoose.Types.ObjectId(id));
+
     const matchingProjects = await Project.find({ usersId: { $in: objectIds } });
+
     const matchedUsers = await User.find({ _id: { $in: objectIds } }, { image: 1 });
     const userImages = matchedUsers.map(user => user.image);
+
     for (const project of matchingProjects) {
-      const updatedUsersId = project.usersId.filter(userId => {
+      const updatedUsersId = (project.usersId ?? []).filter(userId => {
         return !objectIds.map(objId => objId.toString()).includes(userId.toString());
       });
-      const updatedUsers = project.users.filter(userImage => {
+
+      const updatedUsers = (project.users ?? []).filter(userImage => {
         return !userImages.includes(userImage);
       });
+
       await Project.updateOne(
         { _id: project._id },
         {
           $set: {
             usersId: updatedUsersId, 
-            users: updatedUsers 
+            users: updatedUsers  
           }
         }
       );
@@ -206,16 +266,15 @@ const deleteUserIntoDB = async (payload: any) => {
         );
       })
     );
-    
+
     const result = await User.deleteMany({ _id: { $in: objectIds } });
     return result;
+
   } catch (error) {
     console.error('Error updating projects:', error);
     throw error;
   }
 };
-
-
 
 
 
