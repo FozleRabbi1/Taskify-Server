@@ -8,70 +8,6 @@ import { Todos } from "../Todos/Todos.module";
 import { User } from "../User/user.model";
 
 
-// ===================================================================================================================
-
-// const addProjectIntoDB = async (payload: TProjuct) => {
-//   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
-//   const lastDocumentId = lastDocument?.id || 0;
-//   const { startsAt, endsAt, usersId, clientsId, ...datas } = payload;
-//   const usersData = await User.find({ _id: { $in: usersId } }).select('image');
-//   const usersImages = usersData.map(user => user.image);
-//   const clientsData = await User.find({ _id: { $in: clientsId } }).select('image');
-//   const clientsImages = clientsData.map(client => client.image);  
-
-//   if (!usersId || usersId.length === 0) {
-//     throw new Error('No usersId provided or the usersId array is empty');
-//   }
-
-//   const updateStartsAt = new Date(startsAt).toISOString();
-//   const updateEndsAt = new Date(endsAt).toISOString();
-
-//   const data = {
-//     id: lastDocumentId + 1,
-//     title: datas.title,
-//     budget: datas.budget,
-//     priority: datas.priority,
-//     status: datas.status,
-//     tags: datas.tags,
-//     users: usersImages,
-//     usersId,
-//     clientsId,
-//     clients: clientsImages,
-//     startsAt: updateStartsAt,
-//     endsAt: updateEndsAt,
-//   };
-
-//   const session = await mongoose.startSession();
-//   try{
-//     session.startTransaction()
-//     const result = await Project.create([data], {session});
-//   const assignedProjectCounts = await Promise.all(
-//     usersId.map(async (userId) => {
-//       const count = await Project.countDocuments({
-//         usersId: { $in: [userId] },
-//       }).session(session);
-//       return { userId, assignedProjectCount: count };
-//     })
-//   );
-//    await Promise.all(
-//     assignedProjectCounts.map(async (item)=> {
-//       const result = await User.findByIdAndUpdate(item.userId, {projects : item.assignedProjectCount } , {new : true, runValidators : true, session } )
-//       return result
-//     } )
-//   )
-//   await session.commitTransaction();
-//   await session.endSession(); 
-//   return result;
-//   }
-//   catch(err : any){
-//     await session.abortTransaction(); 
-//     await session.endSession(); 
-//     throw new Error(err);
-//   }
-  
-// };
-
-
 
 const addProjectIntoDB = async (payload: TProjuct) => {
   const lastDocument = await Project.findOne().sort({ _id: -1 }).exec();
@@ -257,7 +193,6 @@ const duplicateDataIntoDB = async (mainId: string, title: string) => {
 };
 
 
-
 const getAllFavouriteProjects = async () => {  
   const result = await Project.find({isFavourite : "true"});
   return result;
@@ -285,89 +220,6 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
   }
 };
 
-
-
-
-// const updateMainProjectsSingleDataIntoDB = async (id : string , payload : Partial<TProjuct> ) =>{
-//   const result =  await Project.findByIdAndUpdate(id, payload, {
-//     new : true,
-//     runValidators : true
-//   })  
-//   return result
-// }
-
-// =========================================== 9 / 26 / 2024 ==== ( 1 )
-
-// const updateMainProjectsSingleDataIntoDB = async (id: string, payload: Partial<TProjuct>) => {
-//   const session = await mongoose.startSession();
-//   try {
-//     session.startTransaction();
-
-//     const userIds = payload?.users;
-//     const originalProject = await Project.findById(id).select('usersId').session(session);
-//     if (!originalProject) throw new Error('Project not found');
-
-//     const originalUserIds = originalProject.usersId || [];
-
-//     // Update images and user IDs in the payload
-//     if (Array.isArray(userIds)) {
-//       const usersData = await User.find({ _id: { $in: userIds } }).select('image');
-//       const usersImages = usersData.map(user => user.image);
-//       payload.users = usersImages as string[];
-//       payload.usersId = userIds;
-
-//       // Find users to remove and keep
-//       const removedUserIds = originalUserIds.filter(userId => !userIds.includes(userId.toString()));
-
-//       // Update the project with the new payload
-//       await Project.findByIdAndUpdate(id, payload, {
-//         new: true,
-//         runValidators: true,
-//         session,
-//       });
-
-//       // Count projects for each user, both added and removed
-//       const allUserIds = [...new Set([...userIds, ...removedUserIds])];
-//       const assignedProjectCounts = await Promise.all(
-//         allUserIds.map(async (userId) => {
-//           const count = await Project.countDocuments({
-//             usersId: { $in: [userId] }
-//           }).session(session);
-//           return { userId, assignedProjectCount: count };
-//         })
-//       );
-
-//       // Prepare bulk update for users
-//       const bulkOps = assignedProjectCounts.map(item => ({
-//         updateOne: {
-//           filter: { _id: item.userId },
-//           update: { projects: item.assignedProjectCount },
-//           upsert: false
-//         }
-//       }));
-
-//       // Execute bulk operation
-//       await User.bulkWrite(bulkOps, { session });
-//     } else {
-//       // If no users to update, just update other fields
-//       await Project.findByIdAndUpdate(id, payload, {
-//         new: true,
-//         runValidators: true,
-//         session,
-//       });
-//     }
-
-//     await session.commitTransaction();
-//     return await Project.findById(id).session(session); // Return updated project
-
-//   } catch (error) {
-//     await session.abortTransaction();
-//     console.error('Error updating project with user data:', error);
-//     throw new Error('Error updating project with user data');
-//   } finally {
-//     await session.endSession();
-//   }
-// };
 
 const updateMainProjectsSingleDataIntoDB = async (id: string, payload: Partial<TProjuct>) => {
   const session = await mongoose.startSession();
@@ -430,8 +282,6 @@ const updateMainProjectsSingleDataIntoDB = async (id: string, payload: Partial<T
 };
 
 
-
-
 const updateProjectIntoDB = async (id: string, keyName : string , payload: Partial<TProjuct>) => {  
   const update = { [keyName]: payload };
   const updatedProject = await Project.findByIdAndUpdate(id, update, {
@@ -440,20 +290,6 @@ const updateProjectIntoDB = async (id: string, keyName : string , payload: Parti
   });
   return updatedProject
 };
-
-// const deleteProjectsIntoDB = async (payload : any ) => {
-//   try {
-//     if (!Array.isArray(payload) || !payload.every(id => typeof id === 'string')) {
-//       throw new Error('Invalid payload format');
-//     }
-//     const objectIds = payload.map(id => new mongoose.Types.ObjectId(id));
-//     const result = await Project.deleteMany({ _id: { $in: objectIds } });
-//     return result;
-//   } catch (error) {
-//     console.error('Error deleting projects:', error);
-//     throw error;
-//   }
-// };
 
 
 const deleteProjectsIntoDB = async (payload: any) => {

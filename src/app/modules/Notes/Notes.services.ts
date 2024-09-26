@@ -6,7 +6,6 @@ const createNoteIntoDB = async ( payload : Partial<TNote> ) => {
     return result;
   };
 
-
 const getAllNotesFromDB = async (  ) => {
     const result = await Note.find();
     return result.reverse();

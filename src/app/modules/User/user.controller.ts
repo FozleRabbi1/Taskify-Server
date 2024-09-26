@@ -64,7 +64,6 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
-
 const deleteUser = catchAsync(async (req, res) => {
   const deleteIdArray = req?.body?.idArray;
   const result = await UserServices.deleteUserIntoDB(deleteIdArray );

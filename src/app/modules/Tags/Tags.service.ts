@@ -13,7 +13,6 @@ const getAllTagsFromDB = async (query : Record<string , unknown>) => {
     return result;
 
   };
-
   
 const updateTagsIntoDB = async (id : string, payload : Partial<TTags>) => { 
     const result = await Tags.findByIdAndUpdate(id, payload, {
@@ -22,7 +21,6 @@ const updateTagsIntoDB = async (id : string, payload : Partial<TTags>) => {
     })
     return result;
   };
-
 
   const deleteTagsInfoDB = async (ids: { idArray: string[] }) => {
     try {

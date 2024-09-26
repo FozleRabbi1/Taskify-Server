@@ -23,8 +23,7 @@ const getAllNotes = catchAsync(async (req, res) => {
     });
   });
 
-const deleteNote = catchAsync(async (req, res) => {
-    
+const deleteNote = catchAsync(async (req, res) => {    
     const result = await NoteServices.deleteNoteIntoDB(req?.params?.id);
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -33,6 +32,7 @@ const deleteNote = catchAsync(async (req, res) => {
       data: result,
     });
   });
+
 const updateNote = catchAsync(async (req, res) => {    
     const result = await NoteServices.updateNoteIntoDB(req?.params?.id, req?.body);
     sendResponse(res, {
