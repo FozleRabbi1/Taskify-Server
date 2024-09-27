@@ -255,9 +255,6 @@ const updateFavouriteProjectIntoDB = async (id: string, payload: Partial<TProjuc
 //   return result;
 // };
 
-
-
-
 const updateMainProjectsSingleDataIntoDB = async (id: string, payload: Partial<TProjuct>) => {
   const session = await mongoose.startSession();
   try {
