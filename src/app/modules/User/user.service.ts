@@ -34,8 +34,9 @@ const createUserIntoDB = async (payload: TUser) => {
 
 const getAllUserFromDB = async () => {
   const user = await User.find({ role: { $in: ["Admin", "user"] } });
-  const client = await User.find({role : "client"})
-  return {user, client};
+  const client = await User.find({role : "client"});
+  const allUsers = await User.find()
+  return {user, client, allUsers};
 };
 
 const findSingleUserIntoDB = async (email : string) => {
@@ -43,9 +44,8 @@ const findSingleUserIntoDB = async (email : string) => {
   return result;
 };
 
-const loginUserIntoDB = async (paylod: TLoginUser) => {
+const loginUserIntoDB = async (paylod: TLoginUser) => {  
   const userData = await User.isUserExistsByCustomeId(paylod.email);
-
   if (!userData) {
     throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
   }
@@ -53,29 +53,35 @@ const loginUserIntoDB = async (paylod: TLoginUser) => {
   if (!(await User.isPasswordMatched(paylod?.password, userData?.password))) {
     throw new AppError(httpStatus.FORBIDDEN, 'password is not matched');
   }
-
+  if(userData){
+    await User.findOneAndUpdate({email : paylod.email}, {isActive : paylod.isActive}, {new : true, runValidators : true})
+  }
   const jwtPayload = {
     email: userData.email,
     role: userData.role,
   };
+  
   // =========== jwt এর builting function
   const accessToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string,
   );
-
   const refreshToken = createToken(
     jwtPayload,
     config.jwt_refresh_secret as string,
     config.jwt_refresh_expires_in as string,
   );
-
   return {
     accessToken,
     refreshToken,
   };
 };
+
+const logOut = async ({email} : { email : string})=>{  
+  const result = await User.findOneAndUpdate({email}, {isActive : false}, {new : true, runValidators : true})
+  return result  
+}
 
 const refreshToken = async (token: string) => {
   if (!token) {
@@ -170,5 +176,6 @@ export const UserServices = {
   loginUserIntoDB,
   refreshToken,
   findSingleUserIntoDB,
-  deleteUserIntoDB
+  deleteUserIntoDB,
+  logOut
 };

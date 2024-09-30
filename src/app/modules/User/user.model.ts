@@ -3,7 +3,7 @@ import { TUser, TUserName, UserModel } from './user.interface';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 
-const studentNameSchema = new Schema<TUserName>({
+const UserNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: [true, 'First name is required'],
@@ -21,7 +21,7 @@ const userSchema = new Schema<TUser, UserModel>(
   {
     Id : { type : Number, required : [true, "Id is required"] },
     name: {
-      type: studentNameSchema,
+      type: UserNameSchema,
       required: [true, 'Name is required'],
     },
     email: {
@@ -52,6 +52,10 @@ const userSchema = new Schema<TUser, UserModel>(
     },
     number : {
       type : String
+    },
+    isActive : {
+      type : Boolean,
+      default : false
     }
   },
   {

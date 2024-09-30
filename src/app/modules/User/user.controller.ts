@@ -53,6 +53,21 @@ const loginUser = catchAsync(async (req, res) => {
   });
 });
 
+const logOutUser = catchAsync(async (req, res) => {
+  const result = await UserServices.logOut(req.body);
+  // const { refreshToken, accessToken } = result;
+  // res.cookie('refreshToken', refreshToken, {
+  //   secure: config.NODE_ENV === 'production',
+  //   httpOnly: true,
+  // });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User is log Out successfully',
+    data: result,
+  });
+});
+
 const refreshToken = catchAsync(async (req, res) => {
   const { refreshToken } = req.cookies;
   const result = await UserServices.refreshToken(refreshToken);
@@ -82,5 +97,6 @@ export const userController = {
   createUser,
   loginUser,
   refreshToken,
-  deleteUser
+  deleteUser,
+  logOutUser
 };

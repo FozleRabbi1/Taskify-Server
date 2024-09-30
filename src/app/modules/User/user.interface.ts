@@ -18,12 +18,14 @@ export interface TUser {
   projects ?: number;
   tasks ?: number;
   number ?: string;
+  isActive ?: boolean ;
 }
 
 // ======================================>>>>>>>> Login Interface
 export type TLoginUser = {
   email: string;
   password: string;
+  isActive : boolean
 };
 
 export interface UserModel extends Model<TUser> {
