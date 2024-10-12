@@ -44,8 +44,11 @@ const findSingleUserIntoDB = async (email : string) => {
   return result;
 };
 
+
+
 const loginUserIntoDB = async (paylod: TLoginUser) => {  
   const userData = await User.isUserExistsByCustomeId(paylod.email);
+  
   if (!userData) {
     throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
   }
@@ -77,6 +80,9 @@ const loginUserIntoDB = async (paylod: TLoginUser) => {
     refreshToken,
   };
 };
+
+
+
 
 const logOut = async ({email} : { email : string})=>{  
   const result = await User.findOneAndUpdate({email}, {isActive : false}, {new : true, runValidators : true})

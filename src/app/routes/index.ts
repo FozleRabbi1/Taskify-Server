@@ -6,9 +6,11 @@ import { TagsRouter } from '../modules/Tags/Tags.routes';
 import { TodosRouter } from '../modules/Todos/Todos.routes';
 import { NotesRouter } from '../modules/Notes/Notes.routes';
 import { ContactsRouter } from '../modules/Contacts/ManageContacts/ManageContacts.route';
+import { VisitorRouter } from '../modules/visitor/visitor.route';
 const router = express.Router();
 
 const moduleRoutes = [
+  { path: '/visitor', route: VisitorRouter },
   { path: '/todos', route: TodosRouter },
   { path: '/projects', route: projectsRouter },
   { path: '/auth', route: UserRouter },
@@ -23,4 +25,3 @@ moduleRoutes.forEach((pathRouter) =>
 );
 
 export default router;
-
