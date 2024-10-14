@@ -64,7 +64,6 @@ const loginUserIntoDB = async (paylod: TLoginUser) => {
     role: userData.role,
   };
   
-  // =========== jwt এর builting function
   const accessToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
